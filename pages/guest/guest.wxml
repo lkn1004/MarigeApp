@@ -1,6 +1,6 @@
 <view class="page">
   <!-- 统计卡片 -->
-  <view class="stats-card">
+  <view class="stats-card card">
     <view class="stat-item">
       <text class="stat-value">{{stats.total}}</text>
       <text class="stat-label">总人数</text>
@@ -35,7 +35,7 @@
     </view>
   </view>
 
-  <!-- 筛选标签 -->
+  <!-- 筛选 -->
   <view class="filter-section">
     <view class="filter-group">
       <text class="filter-label">分组</text>
@@ -45,14 +45,42 @@
             class="filter-tag {{selectedGroup === 'all' ? 'active' : ''}}"
             data-group="all"
             bindtap="selectGroup"
-          >全部</view>
+          >
+            全部
+          </view>
           <view 
             class="filter-tag {{selectedGroup === group.id ? 'active' : ''}}"
             wx:for="{{groups}}"
             wx:key="id"
             data-group="{{group.id}}"
             bindtap="selectGroup"
-          >{{item.name}}</view>
+          >
+            {{group.name}}
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+    
+    <view class="filter-group">
+      <text class="filter-label">状态</text>
+      <scroll-view class="filter-scroll" scroll-x>
+        <view class="filter-tags">
+          <view 
+            class="filter-tag {{selectedStatus === 'all' ? 'active' : ''}}"
+            data-status="all"
+            bindtap="selectStatus"
+          >
+            全部
+          </view>
+          <view 
+            class="filter-tag {{selectedStatus === status.id ? 'active' : ''}}"
+            wx:for="{{statuses}}"
+            wx:key="id"
+            data-status="{{status.id}}"
+            bindtap="selectStatus"
+          >
+            {{status.name}}
+          </view>
         </view>
       </scroll-view>
     </view>
@@ -65,39 +93,43 @@
         class="guest-card card"
         wx:for="{{filteredGuests}}"
         wx:key="id"
-        data-id="{{item.id}}"
       >
-        <view class="guest-main" bindtap="toggleGuestStatus" data-id="{{item.id}}">
-          <view class="guest-status {{item.status}}">
+        <view class="guest-main">
+          <view 
+            class="guest-status {{item.status}}"
+            data-id="{{item.id}}"
+            bindtap="toggleGuestStatus"
+          >
             <text wx:if="{{item.status === 'confirmed'}}">✓</text>
-            <text wx:if="{{item.status === 'declined'}}">✗</text>
-            <text wx:if="{{item.status === 'pending' || item.status === 'sent'}}">?</text>
+            <text wx:elif="{{item.status === 'declined'}}">✗</text>
+            <text wx:else>?</text>
           </view>
+          
           <view class="guest-content">
             <view class="guest-header">
               <text class="guest-name">{{item.name}}</text>
-              <text class="guest-attendant" wx:if="{{item.isAttendant}}">👰</text>
+              <text class="guest-attendant" wx:if="{{item.isAttendant}}">👰🤵</text>
             </view>
+            
             <view class="guest-meta">
-              <text class="meta-item" wx:if="{{item.title}}">{{item.title}}</text>
-              <text class="meta-separator" wx:if="{{item.title && item.phone}}">|</text>
-              <text class="meta-item" wx:if="{{item.phone}}">{{item.phone}}</text>
+              <text wx:if="{{item.relation}}">{{item.relation}}</text>
+              <text class="meta-separator" wx:if="{{item.relation && item.groupName}}">•</text>
+              <text wx:if="{{item.groupName}}">{{item.groupName}}</text>
+              <text class="meta-separator" wx:if="{{item.groupName && item.statusName}}">•</text>
+              <text wx:if="{{item.statusName}}" style="color: {{item.statusColor}}">{{item.statusName}}</text>
             </view>
+            
             <view class="guest-tags">
-              <text class="guest-tag group-tag">{{item.groupName}}</text>
-              <text class="guest-tag status-tag" style="background: {{item.statusColor}}20; color: {{item.statusColor}}">
-                {{item.statusName}}
-              </text>
+              <text class="guest-tag" wx:if="{{item.phone}}">📞 {{item.phone}}</text>
+              <text class="guest-tag" wx:if="{{item.table}}">🪑 {{item.table}}</text>
+              <text class="guest-tag" wx:if="{{item.dietary}}">🍽️ {{item.dietary}}</text>
             </view>
           </view>
         </view>
+        
         <view class="guest-actions">
-          <view class="action-btn" bindtap="editGuest" data-id="{{item.id}}">
-            <text>✏️</text>
-          </view>
-          <view class="action-btn delete" bindtap="deleteGuest" data-id="{{item.id}}">
-            <text>🗑️</text>
-          </view>
+          <view class="action-btn" data-id="{{item.id}}" bindtap="editGuest">✏️</view>
+          <view class="action-btn delete" data-id="{{item.id}}" bindtap="deleteGuest">🗑️</view>
         </view>
       </view>
     </view>
@@ -106,7 +138,7 @@
     <view class="empty-state" wx:if="{{filteredGuests.length === 0 && !loading}}">
       <text class="empty-icon">👥</text>
       <text class="empty-text">暂无宾客</text>
-      <text class="empty-hint">点击下方按钮添加宾客</text>
+      <text class="empty-hint">点击下方按钮添加第一位宾客</text>
     </view>
   </view>
 
@@ -135,25 +167,24 @@
           />
         </view>
 
-        <view class="form-row">
-          <view class="form-item half">
-            <text class="form-label">称谓</text>
-            <input 
-              class="form-input" 
-              placeholder="如：叔叔"
-              value="{{newGuest.title}}"
-              bindinput="onTitleInput"
-            />
-          </view>
-          <view class="form-item half">
-            <text class="form-label">关系</text>
-            <input 
-              class="form-input" 
-              placeholder="如：同事"
-              value="{{newGuest.relation}}"
-              bindinput="onRelationInput"
-            />
-          </view>
+        <view class="form-item">
+          <text class="form-label">称谓</text>
+          <input 
+            class="form-input" 
+            placeholder="如：叔叔、阿姨、同学"
+            value="{{newGuest.title}}"
+            bindinput="onTitleInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">关系</text>
+          <input 
+            class="form-input" 
+            placeholder="如：男方家人、朋友、同事"
+            value="{{newGuest.relation}}"
+            bindinput="onRelationInput"
+          />
         </view>
 
         <view class="form-item">
@@ -176,7 +207,9 @@
               wx:key="id"
               data-group="{{group.id}}"
               bindtap="selectGroupNew"
-            >{{item.name}}</view>
+            >
+              {{group.name}}
+            </view>
           </view>
         </view>
 
@@ -184,34 +217,40 @@
           <text class="form-label">邀请状态</text>
           <view class="status-options">
             <view 
-              class="status-option {{newGuest.status === status.id ? 'selected' : ''}}"
+              class="group-option {{newGuest.status === status.id ? 'selected' : ''}}"
               wx:for="{{statuses}}"
               wx:key="id"
               data-status="{{status.id}}"
               bindtap="selectStatusNew"
-              style="border-color: {{newGuest.status === status.id ? status.color : ''}}; color: {{newGuest.status === status.id ? status.color : ''}}"
-            >{{status.name}}</view>
+            >
+              {{status.name}}
+            </view>
           </view>
         </view>
 
         <view class="form-item">
-          <text class="form-label">特殊需求</text>
+          <text class="form-label">桌号</text>
           <input 
             class="form-input" 
-            placeholder="如：素食、清淡"
+            placeholder="如：1号桌"
+            value="{{newGuest.table}}"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">饮食要求</text>
+          <input 
+            class="form-input" 
+            placeholder="如：素食、清真"
             value="{{newGuest.dietary}}"
             bindinput="onDietaryInput"
           />
         </view>
 
-        <view class="form-item attendant-item">
+        <view class="attendant-item">
           <view class="attendant-row">
             <text class="form-label">伴郎/伴娘</text>
-            <switch 
-              checked="{{newGuest.isAttendant}}" 
-              bindchange="toggleAttendant"
-              color="#E8B4B8"
-            />
+            <switch checked="{{newGuest.isAttendant}}" bindchange="toggleAttendant" />
           </view>
         </view>
 
