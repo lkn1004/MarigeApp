@@ -29,7 +29,7 @@ Page({
     sortOrder: 'asc',
     viewMode: 'list',
     showBatchActions: false,
-    selectedTodos as string[],
+    selectedTodos,
     loading: true
   },
 

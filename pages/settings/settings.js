@@ -81,7 +81,7 @@ Page({
   startEdit(field) {
     this.setData({
       editingField: field,
-      tempValue: this.data[field as keyof typeof this.data] as string
+      tempValue: this.data[field]
     });
   },
 

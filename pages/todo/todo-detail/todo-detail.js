@@ -10,7 +10,7 @@ Page({
     priorityInfo,
     supplier,
     editing: false,
-    editingSubtask as string | null,
+    editingSubtask,
     newSubtaskTitle: '',
     showAddSubtask: false,
     currentDate: ''

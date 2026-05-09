@@ -7,7 +7,7 @@ Page({
     timelines: TIMELINE_INFO,
     selectedTimeline,
     checklistItems,
-    expandedTimelines as string[],
+    expandedTimelines,
     applying: false,
     loading: true
   },
@@ -42,7 +42,7 @@ Page({
   },
 
   getTimelineItems(timelineId) {
-    const checklist = WEDDING_CHECKLISTS[timelineId as keyof typeof WEDDING_CHECKLISTS];
+    const checklist = WEDDING_CHECKLISTS[timelineId 'general'];
     if (!checklist) return [];
     
     return checklist.map(item => ({

@@ -5,12 +5,12 @@ Page({
   data: {
     weddingDate: '',
     daysUntil: 0,
-    timeUntil,
-    settings,
-    countdownEvents,
-    milestones,
-    timer as null,
-    currentTime,
+    timeUntil: null,
+    settings: null,
+    countdownEvents: [],
+    milestones: [],
+    timer: null,
+    currentTime: null,
     loading: true
   },
 
@@ -25,13 +25,6 @@ Page({
 
   onUnload() {
     this.stopTimer();
-  },
-
-  formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   },
 
   loadData() {
@@ -50,7 +43,7 @@ Page({
     }
     
     const upcomingTodos = todoList
-      .filter((t) => t.dueDate && !t.completed && t.dueDate >= this.formatDate(new Date()))
+      .filter((t) => t.dueDate && !t.completed && t.dueDate >= formatDate(new Date()))
       .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
       .slice(0, 5);
     
@@ -70,10 +63,13 @@ Page({
     const timer = setInterval(() => {
       if (this.data.weddingDate) {
         const timeUntil = getTimeUntil(this.data.weddingDate + ' 00:00:00');
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
         this.setData({
           timeUntil,
-          currentTime: this.formatDate(new Date()) + ' ' + 
-            `${new Date().getHours()}:${String(new Date().getMinutes()).padStart(2, '0')}:${String(new Date().getSeconds()).padStart(2, '0')}`
+          currentTime: formatDate(now) + ' ' + hours + ':' + minutes + ':' + seconds
         });
       }
     }, 1000);
@@ -84,7 +80,7 @@ Page({
   stopTimer() {
     if (this.data.timer) {
       clearInterval(this.data.timer);
-      this.setData({ timer });
+      this.setData({ timer: null });
     }
   },
 
