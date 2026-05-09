@@ -1,22 +1,22 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { TODO_CATEGORIES, PRIORITIES } = require('../../data/categories');
 const { generateId } = require('../../utils/id');
 
 Page({
   data: {
     todoId: '',
-    todo: null as any,
-    categoryInfo: null,
-    priorityInfo: null,
-    supplier: null as any,
+    todo as any,
+    categoryInfo,
+    priorityInfo,
+    supplier as any,
     editing: false,
-    editingSubtask: null as string | null,
+    editingSubtask as string | null,
     newSubtaskTitle: '',
     showAddSubtask: false,
     currentDate: ''
   },
 
-  onLoad(options: any) {
+  onLoad(options) {
     this.setData({ 
       todoId: options.id,
       currentDate: this.formatDate(new Date())
@@ -28,7 +28,7 @@ Page({
     this.loadTodo();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -37,7 +37,7 @@ Page({
 
   loadTodo() {
     const todoList = wx.getStorageSync('todo_list') || [];
-    const todo = todoList.find((t: any) => t.id === this.data.todoId);
+    const todo = todoList.find((t) => t.id === this.data.todoId);
     
     if (todo) {
       const category = TODO_CATEGORIES.find(c => c.id === todo.category);
@@ -46,7 +46,7 @@ Page({
       let supplier = null;
       if (todo.supplierId) {
         const supplierList = wx.getStorageSync('supplier_list') || [];
-        supplier = supplierList.find((s: any) => s.id === todo.supplierId);
+        supplier = supplierList.find((s) => s.id === todo.supplierId);
       }
       
       this.setData({
@@ -68,12 +68,12 @@ Page({
     const todoList = wx.getStorageSync('todo_list') || [];
     const now = this.formatDate(new Date());
     
-    const updatedList = todoList.map((t: any) => {
+    const updatedList = todoList.map((t) => {
       if (t.id === this.data.todoId) {
         return {
           ...t,
           completed: !t.completed,
-          completedAt: !t.completed ? now : null
+          completedAt: !t.completed ? now 
         };
       }
       return t;
@@ -95,7 +95,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           const todoList = wx.getStorageSync('todo_list') || [];
-          const updatedList = todoList.filter((t: any) => t.id !== this.data.todoId);
+          const updatedList = todoList.filter((t) => t.id !== this.data.todoId);
           wx.setStorageSync('todo_list', updatedList);
           
           wx.showToast({
@@ -131,7 +131,7 @@ Page({
     this.setData({ showAddSubtask: false, newSubtaskTitle: '' });
   },
 
-  onSubtaskTitleInput(e: any) {
+  onSubtaskTitleInput(e) {
     this.setData({ newSubtaskTitle: e.detail.value });
   },
 
@@ -147,7 +147,7 @@ Page({
     const todoList = wx.getStorageSync('todo_list') || [];
     const now = this.formatDate(new Date());
     
-    const updatedList = todoList.map((t: any) => {
+    const updatedList = todoList.map((t) => {
       if (t.id === this.data.todoId) {
         const newSubtask = {
           id: generateId(),
@@ -173,14 +173,14 @@ Page({
     });
   },
 
-  toggleSubtaskComplete(e: any) {
+  toggleSubtaskComplete(e) {
     const subtaskId = e.currentTarget.dataset.id;
     const todoList = wx.getStorageSync('todo_list') || [];
     const now = this.formatDate(new Date());
     
-    const updatedList = todoList.map((t: any) => {
+    const updatedList = todoList.map((t) => {
       if (t.id === this.data.todoId) {
-        const subtasks = (t.subtasks || []).map((s: any) => {
+        const subtasks = (t.subtasks || []).map((s) => {
           if (s.id === subtaskId) {
             return { ...s, completed: !s.completed };
           }
@@ -195,7 +195,7 @@ Page({
     this.loadTodo();
   },
 
-  deleteSubtask(e: any) {
+  deleteSubtask(e) {
     const subtaskId = e.currentTarget.dataset.id;
     
     wx.showModal({
@@ -206,9 +206,9 @@ Page({
           const todoList = wx.getStorageSync('todo_list') || [];
           const now = this.formatDate(new Date());
           
-          const updatedList = todoList.map((t: any) => {
+          const updatedList = todoList.map((t) => {
             if (t.id === this.data.todoId) {
-              const subtasks = (t.subtasks || []).filter((s: any) => s.id !== subtaskId);
+              const subtasks = (t.subtasks || []).filter((s) => s.id !== subtaskId);
               return { ...t, subtasks, updatedAt: now };
             }
             return t;
@@ -235,7 +235,7 @@ Page({
       id: generateId(),
       title: `${this.data.todo.title} (副本)`,
       completed: false,
-      completedAt: null,
+      completedAt,
       dueDate: '',
       createdAt: now,
       updatedAt: now
@@ -250,7 +250,7 @@ Page({
     });
   },
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount) {
     return `¥${Number(amount || 0).toLocaleString('zh-CN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0

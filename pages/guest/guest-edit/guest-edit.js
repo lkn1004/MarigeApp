@@ -1,9 +1,9 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 
 Page({
   data: {
     guestId: '',
-    guest: null
+    guest
   },
 
   onLoad(options) {

@@ -1,16 +1,16 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { SUPPLIER_TYPES } = require('../../data/categories');
 const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    suppliers: [] as any[],
-    filteredSuppliers: [] as any[],
+    suppliers as any[],
+    filteredSuppliers as any[],
     types: SUPPLIER_TYPES,
     selectedType: 'all',
     searchKeyword: '',
     showAddModal: false,
-    editingSupplier: null as any,
+    editingSupplier as any,
     newSupplier: {
       name: '',
       type: 'hotel',
@@ -32,7 +32,7 @@ Page({
     this.loadSuppliers();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -44,7 +44,7 @@ Page({
     
     const supplierList = wx.getStorageSync('supplier_list') || [];
     
-    const suppliersWithType = supplierList.map((supplier: any) => {
+    const suppliersWithType = supplierList.map((supplier) => {
       const type = SUPPLIER_TYPES.find(t => t.id === supplier.type);
       return {
         ...supplier,
@@ -78,12 +78,12 @@ Page({
     this.setData({ filteredSuppliers: filtered });
   },
 
-  onSearch(e: any) {
+  onSearch(e) {
     this.setData({ searchKeyword: e.detail.value });
     this.applyFilters();
   },
 
-  selectType(e: any) {
+  selectType(e) {
     const type = e.currentTarget.dataset.type;
     this.setData({ selectedType: type });
     this.applyFilters();
@@ -92,7 +92,7 @@ Page({
   openAddModal() {
     this.setData({
       showAddModal: true,
-      editingSupplier: null,
+      editingSupplier,
       newSupplier: {
         name: '',
         type: 'hotel',
@@ -110,35 +110,35 @@ Page({
     this.setData({ showAddModal: false });
   },
 
-  onNameInput(e: any) {
+  onNameInput(e) {
     this.setData({ 'newSupplier.name': e.detail.value });
   },
 
-  onContactInput(e: any) {
+  onContactInput(e) {
     this.setData({ 'newSupplier.contact': e.detail.value });
   },
 
-  onPhoneInput(e: any) {
+  onPhoneInput(e) {
     this.setData({ 'newSupplier.phone': e.detail.value });
   },
 
-  onPriceInput(e: any) {
+  onPriceInput(e) {
     this.setData({ 'newSupplier.price': e.detail.value });
   },
 
-  onDepositInput(e: any) {
+  onDepositInput(e) {
     this.setData({ 'newSupplier.deposit': e.detail.value });
   },
 
-  onNotesInput(e: any) {
+  onNotesInput(e) {
     this.setData({ 'newSupplier.notes': e.detail.value });
   },
 
-  selectSupplierType(e: any) {
+  selectSupplierType(e) {
     this.setData({ 'newSupplier.type': e.currentTarget.dataset.type });
   },
 
-  onScheduleChange(e: any) {
+  onScheduleChange(e) {
     this.setData({ 'newSupplier.schedule': e.detail.value });
   },
 
@@ -154,7 +154,7 @@ Page({
     const now = this.formatDate(new Date());
     
     if (this.data.editingSupplier) {
-      const index = supplierList.findIndex((s: any) => s.id === this.data.editingSupplier.id);
+      const index = supplierList.findIndex((s) => s.id === this.data.editingSupplier.id);
       if (index !== -1) {
         supplierList[index] = {
           ...supplierList[index],
@@ -198,9 +198,9 @@ Page({
     });
   },
 
-  editSupplier(e: any) {
+  editSupplier(e) {
     const supplierId = e.currentTarget.dataset.id;
-    const supplier = this.data.suppliers.find((s: any) => s.id === supplierId);
+    const supplier = this.data.suppliers.find((s) => s.id === supplierId);
     
     if (supplier) {
       this.setData({
@@ -220,7 +220,7 @@ Page({
     }
   },
 
-  deleteSupplier(e: any) {
+  deleteSupplier(e) {
     const supplierId = e.currentTarget.dataset.id;
     
     wx.showModal({
@@ -229,7 +229,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           const supplierList = wx.getStorageSync('supplier_list') || [];
-          const updatedList = supplierList.filter((s: any) => s.id !== supplierId);
+          const updatedList = supplierList.filter((s) => s.id !== supplierId);
           wx.setStorageSync('supplier_list', updatedList);
           this.loadSuppliers();
           
@@ -242,14 +242,14 @@ Page({
     });
   },
 
-  goToDetail(e: any) {
+  goToDetail(e) {
     const supplierId = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/supplier/supplier-detail/supplier-detail?id=${supplierId}`
     });
   },
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount) {
     return `¥${Number(amount || 0).toLocaleString('zh-CN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0

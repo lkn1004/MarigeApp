@@ -1,4 +1,4 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 
 Page({
   data: {
@@ -7,9 +7,9 @@ Page({
     groomName: '',
     brideName: '',
     progress: 0,
-    todayTodos: [] as any[],
-    recentTodos: [] as any[],
-    upcomingEvents: [] as any[],
+    todayTodos as any[],
+    recentTodos as any[],
+    upcomingEvents as any[],
     quickStats: {
       totalTodos: 0,
       completedTodos: 0,
@@ -55,22 +55,22 @@ Page({
     const guestList = wx.getStorageSync('guest_list') || [];
     
     const today = this.formatDate(new Date());
-    const todayTodos = todoList.filter((todo: any) => 
+    const todayTodos = todoList.filter((todo) => 
       todo.dueDate === today && !todo.completed
     ).slice(0, 5);
     
     const recentTodos = todoList
-      .filter((todo: any) => todo.completed)
-      .sort((a: any, b: any) => 
+      .filter((todo) => todo.completed)
+      .sort((a, b) => 
         new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
       )
       .slice(0, 5);
     
-    const completedTodos = todoList.filter((todo: any) => todo.completed).length;
+    const completedTodos = todoList.filter((todo) => todo.completed).length;
     const totalTodos = todoList.length;
     const progress = totalTodos > 0 ? Math.round((completedTodos / totalTodos) * 100) : 0;
     
-    const confirmedGuests = guestList.filter((guest: any) => 
+    const confirmedGuests = guestList.filter((guest) => 
       guest.status === 'confirmed'
     ).length;
     
@@ -101,14 +101,14 @@ Page({
     });
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   },
 
-  getDaysUntil(dateStr: string): number {
+  getDaysUntil(dateStr) {
     if (!dateStr) return 0;
     
     const target = new Date(dateStr);
@@ -144,11 +144,11 @@ Page({
     });
   },
 
-  completeTodo(e: any) {
+  completeTodo(e) {
     const todoId = e.currentTarget.dataset.id;
     const todoList = wx.getStorageSync('todo_list') || [];
     
-    const updatedList = todoList.map((todo: any) => {
+    const updatedList = todoList.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
@@ -174,7 +174,7 @@ Page({
     });
   },
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount) {
     return `¥${Number(amount || 0).toLocaleString('zh-CN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0

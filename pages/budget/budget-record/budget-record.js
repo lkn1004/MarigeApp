@@ -1,9 +1,9 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 
 Page({
   data: {
     recordId: '',
-    record: null,
+    record,
     formData: {
       description: '',
       amount: '',

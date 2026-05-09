@@ -1,10 +1,10 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { TODO_CATEGORIES, PRIORITIES } = require('../../../data/categories');
 
 Page({
   data: {
     todoId: '',
-    todo: null,
+    todo,
     categories: TODO_CATEGORIES,
     priorities: PRIORITIES,
     formData: {
@@ -88,7 +88,7 @@ Page({
           priority: formData.priority,
           dueDate: formData.dueDate,
           notes: formData.notes,
-          budget: formData.budget ? parseFloat(formData.budget) : null,
+          budget: formData.budget ? parseFloat(formData.budget) ,
           updatedAt: now
         };
       }
@@ -100,10 +100,10 @@ Page({
         priority: formData.priority,
         dueDate: formData.dueDate,
         completed: false,
-        completedAt: null,
+        completedAt,
         notes: formData.notes,
-        budget: formData.budget ? parseFloat(formData.budget) : null,
-        subtasks: [],
+        budget: formData.budget ? parseFloat(formData.budget) ,
+        subtasks,
         createdAt: now,
         updatedAt: now
       });

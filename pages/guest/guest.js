@@ -1,18 +1,18 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { GUEST_GROUPS, INVITE_STATUS } = require('../../data/categories');
 const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    guests: [] as any[],
-    filteredGuests: [] as any[],
+    guests as any[],
+    filteredGuests as any[],
     groups: GUEST_GROUPS,
     statuses: INVITE_STATUS,
     selectedGroup: 'all',
     selectedStatus: 'all',
     searchKeyword: '',
     showAddModal: false,
-    editingGuest: null as any,
+    editingGuest as any,
     newGuest: {
       name: '',
       title: '',
@@ -42,7 +42,7 @@ Page({
     this.loadGuests();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -54,7 +54,7 @@ Page({
     
     const guestList = wx.getStorageSync('guest_list') || [];
     
-    const guestsWithInfo = guestList.map((guest: any) => {
+    const guestsWithInfo = guestList.map((guest) => {
       const group = GUEST_GROUPS.find(g => g.id === guest.group);
       const status = INVITE_STATUS.find(s => s.id === guest.status);
       return {
@@ -103,18 +103,18 @@ Page({
     this.setData({ filteredGuests: filtered });
   },
 
-  onSearch(e: any) {
+  onSearch(e) {
     this.setData({ searchKeyword: e.detail.value });
     this.applyFilters();
   },
 
-  selectGroup(e: any) {
+  selectGroup(e) {
     const group = e.currentTarget.dataset.group;
     this.setData({ selectedGroup: group });
     this.applyFilters();
   },
 
-  selectStatus(e: any) {
+  selectStatus(e) {
     const status = e.currentTarget.dataset.status;
     this.setData({ selectedStatus: status });
     this.applyFilters();
@@ -123,7 +123,7 @@ Page({
   openAddModal() {
     this.setData({
       showAddModal: true,
-      editingGuest: null,
+      editingGuest,
       newGuest: {
         name: '',
         title: '',
@@ -143,35 +143,35 @@ Page({
     this.setData({ showAddModal: false });
   },
 
-  onNameInput(e: any) {
+  onNameInput(e) {
     this.setData({ 'newGuest.name': e.detail.value });
   },
 
-  onTitleInput(e: any) {
+  onTitleInput(e) {
     this.setData({ 'newGuest.title': e.detail.value });
   },
 
-  onPhoneInput(e: any) {
+  onPhoneInput(e) {
     this.setData({ 'newGuest.phone': e.detail.value });
   },
 
-  onRelationInput(e: any) {
+  onRelationInput(e) {
     this.setData({ 'newGuest.relation': e.detail.value });
   },
 
-  onDietaryInput(e: any) {
+  onDietaryInput(e) {
     this.setData({ 'newGuest.dietary': e.detail.value });
   },
 
-  onNotesInput(e: any) {
+  onNotesInput(e) {
     this.setData({ 'newGuest.notes': e.detail.value });
   },
 
-  selectGroupNew(e: any) {
+  selectGroupNew(e) {
     this.setData({ 'newGuest.group': e.currentTarget.dataset.group });
   },
 
-  selectStatusNew(e: any) {
+  selectStatusNew(e) {
     this.setData({ 'newGuest.status': e.currentTarget.dataset.status });
   },
 
@@ -191,7 +191,7 @@ Page({
     const now = this.formatDate(new Date());
     
     if (this.data.editingGuest) {
-      const index = guestList.findIndex((g: any) => g.id === this.data.editingGuest.id);
+      const index = guestList.findIndex((g) => g.id === this.data.editingGuest.id);
       if (index !== -1) {
         guestList[index] = {
           ...guestList[index],
@@ -218,7 +218,7 @@ Page({
         group: newGuest.group,
         status: newGuest.status,
         table: newGuest.table || '',
-        seatNumber: null,
+        seatNumber,
         dietary: newGuest.dietary,
         isAttendant: newGuest.isAttendant,
         notes: newGuest.notes,
@@ -238,9 +238,9 @@ Page({
     });
   },
 
-  editGuest(e: any) {
+  editGuest(e) {
     const guestId = e.currentTarget.dataset.id;
-    const guest = this.data.guests.find((g: any) => g.id === guestId);
+    const guest = this.data.guests.find((g) => g.id === guestId);
     
     if (guest) {
       this.setData({
@@ -262,7 +262,7 @@ Page({
     }
   },
 
-  deleteGuest(e: any) {
+  deleteGuest(e) {
     const guestId = e.currentTarget.dataset.id;
     
     wx.showModal({
@@ -271,7 +271,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           const guestList = wx.getStorageSync('guest_list') || [];
-          const updatedList = guestList.filter((g: any) => g.id !== guestId);
+          const updatedList = guestList.filter((g) => g.id !== guestId);
           wx.setStorageSync('guest_list', updatedList);
           this.loadGuests();
           
@@ -284,12 +284,12 @@ Page({
     });
   },
 
-  toggleGuestStatus(e: any) {
+  toggleGuestStatus(e) {
     const guestId = e.currentTarget.dataset.id;
     const guestList = wx.getStorageSync('guest_list') || [];
     
     const statusFlow = ['pending', 'sent', 'confirmed'];
-    const currentGuest = guestList.find((g: any) => g.id === guestId);
+    const currentGuest = guestList.find((g) => g.id === guestId);
     
     if (currentGuest) {
       const currentIndex = statusFlow.indexOf(currentGuest.status);
@@ -297,7 +297,7 @@ Page({
         ? statusFlow[currentIndex + 1] 
         : 'confirmed';
       
-      const updatedList = guestList.map((g: any) => {
+      const updatedList = guestList.map((g) => {
         if (g.id === guestId) {
           return { ...g, status: nextStatus };
         }

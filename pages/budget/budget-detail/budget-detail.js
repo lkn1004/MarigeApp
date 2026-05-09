@@ -1,10 +1,10 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 
 Page({
   data: {
-    budget: null,
+    budget,
     percentage: 0,
-    records: []
+    records
   },
 
   onLoad() {

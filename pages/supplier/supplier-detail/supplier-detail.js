@@ -1,9 +1,9 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 
 Page({
   data: {
     supplierId: '',
-    supplier: null
+    supplier
   },
 
   onLoad(options) {

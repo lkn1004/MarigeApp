@@ -1,10 +1,10 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { SUPPLIER_TYPES } = require('../../../data/categories');
 
 Page({
   data: {
     supplierId: '',
-    supplier: null,
+    supplier,
     types: SUPPLIER_TYPES,
     formData: {
       name: '',

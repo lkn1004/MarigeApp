@@ -1,13 +1,13 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { WEDDING_CHECKLISTS, TIMELINE_INFO } = require('../../data/templates');
 const { generateId } = require('../../utils/id');
 
 Page({
   data: {
     timelines: TIMELINE_INFO,
-    selectedTimeline: null as any,
-    checklistItems: [] as any[],
-    expandedTimelines: [] as string[],
+    selectedTimeline as any,
+    checklistItems as any[],
+    expandedTimelines as string[],
     applying: false,
     loading: true
   },
@@ -16,7 +16,7 @@ Page({
     this.loadData();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -27,7 +27,7 @@ Page({
     this.setData({ loading: false });
   },
 
-  toggleTimeline(e: any) {
+  toggleTimeline(e) {
     const timelineId = e.currentTarget.dataset.id;
     const expandedTimelines = this.data.expandedTimelines;
     
@@ -41,7 +41,7 @@ Page({
     this.setData({ expandedTimelines });
   },
 
-  getTimelineItems(timelineId: string) {
+  getTimelineItems(timelineId) {
     const checklist = WEDDING_CHECKLISTS[timelineId as keyof typeof WEDDING_CHECKLISTS];
     if (!checklist) return [];
     
@@ -52,7 +52,7 @@ Page({
     }));
   },
 
-  applyTimeline(e: any) {
+  applyTimeline(e) {
     const timelineId = e.currentTarget.dataset.id;
     const items = this.getTimelineItems(timelineId);
     
@@ -67,12 +67,12 @@ Page({
     });
   },
 
-  getTimelineName(timelineId: string): string {
+  getTimelineName(timelineId) {
     const timeline = TIMELINE_INFO.find(t => t.id === timelineId);
     return timeline ? timeline.name : '';
   },
 
-  doApplyTimeline(timelineId: string, items: any[]) {
+  doApplyTimeline(timelineId, items[]) {
     this.setData({ applying: true });
     
     const todoList = wx.getStorageSync('todo_list') || [];
@@ -93,11 +93,11 @@ Page({
       priority: item.priority,
       dueDate: weddingDate,
       completed: false,
-      completedAt: null,
-      supplierId: null,
-      budget: null,
+      completedAt,
+      supplierId,
+      budget,
       notes: '',
-      subtasks: [],
+      subtasks,
       createdAt: now,
       updatedAt: now
     }));
@@ -152,11 +152,11 @@ Page({
         priority: item.priority,
         dueDate: weddingDate,
         completed: false,
-        completedAt: null,
-        supplierId: null,
-        budget: null,
+        completedAt,
+        supplierId,
+        budget,
         notes: '',
-        subtasks: [],
+        subtasks,
         createdAt: now,
         updatedAt: now
       }));

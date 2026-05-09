@@ -1,8 +1,8 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 
 Page({
   data: {
-    settings: null as any,
+    settings as any,
     weddingDate: '',
     groomName: '',
     brideName: '',
@@ -13,7 +13,7 @@ Page({
     loading: true
   },
 
-  onLoad(options: any) {
+  onLoad(options) {
     this.loadSettings();
     
     if (options && options.action === 'setup') {
@@ -25,7 +25,7 @@ Page({
     this.loadSettings();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -78,7 +78,7 @@ Page({
     });
   },
 
-  startEdit(field: string) {
+  startEdit(field) {
     this.setData({
       editingField: field,
       tempValue: this.data[field as keyof typeof this.data] as string
@@ -89,15 +89,15 @@ Page({
     this.setData({ editingField: '' });
   },
 
-  onInputChange(e: any) {
+  onInputChange(e) {
     this.setData({ tempValue: e.detail.value });
   },
 
-  onInputBlur(field: string) {
+  onInputBlur(field) {
     this.setData({ [field]: this.data.tempValue });
   },
 
-  onDateChange(e: any) {
+  onDateChange(e) {
     this.setData({
       weddingDate: e.detail.value,
       editingField: ''
@@ -105,7 +105,7 @@ Page({
     this.saveSettings();
   },
 
-  saveField(field: string) {
+  saveField(field) {
     this.setData({ [field]: this.data.tempValue });
     this.saveSettings();
   },
@@ -160,7 +160,7 @@ Page({
     });
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');

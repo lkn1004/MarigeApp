@@ -1,4 +1,4 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { getWeekDays, getMonthDays, getMonthName, formatDate } = require('../../utils/date');
 const { TODO_CATEGORIES } = require('../../data/categories');
 
@@ -7,10 +7,10 @@ Page({
     currentYear: new Date().getFullYear(),
     currentMonth: new Date().getMonth(),
     weekDays: getWeekDays(),
-    monthDays: [] as any[],
+    monthDays as any[],
     selectedDate: '',
-    selectedTodos: [] as any[],
-    selectedEvents: [] as any[],
+    selectedTodos as any[],
+    selectedEvents as any[],
     viewMode: 'month',
     showEventModal: false,
     newEvent: {
@@ -24,7 +24,7 @@ Page({
       { id: 'meeting', name: '沟通会议', color: '#1890FF' },
       { id: 'payment', name: '付款日期', color: '#D4AF37' }
     ],
-    weddingSettings: null as any,
+    weddingSettings as any,
     loading: true
   },
 
@@ -67,9 +67,9 @@ Page({
     const todoList = wx.getStorageSync('todo_list') || [];
     
     const daysWithTodos = days.map(day => {
-      const dayTodos = todoList.filter((todo: any) => todo.dueDate === day.fullDate);
-      const hasHighPriority = dayTodos.some((t: any) => t.priority === 'high' && !t.completed);
-      const hasCompleted = dayTodos.some((t: any) => t.completed);
+      const dayTodos = todoList.filter((todo) => todo.dueDate === day.fullDate);
+      const hasHighPriority = dayTodos.some((t) => t.priority === 'high' && !t.completed);
+      const hasCompleted = dayTodos.some((t) => t.completed);
       
       return {
         ...day,
@@ -83,7 +83,7 @@ Page({
     this.setData({ monthDays: daysWithTodos });
   },
 
-  isWeddingDay(dateStr: string): boolean {
+  isWeddingDay(dateStr): boolean {
     const settings = wx.getStorageSync('wedding_settings');
     return settings && settings.weddingDate === dateStr;
   },
@@ -93,8 +93,8 @@ Page({
     const { selectedDate } = this.data;
     
     const dayTodos = todoList
-      .filter((todo: any) => todo.dueDate === selectedDate)
-      .map((todo: any) => {
+      .filter((todo) => todo.dueDate === selectedDate)
+      .map((todo) => {
         const category = TODO_CATEGORIES.find(c => c.id === todo.category);
         return {
           ...todo,
@@ -141,7 +141,7 @@ Page({
     this.loadSelectedDateTodos();
   },
 
-  selectDate(e: any) {
+  selectDate(e) {
     const dateStr = e.currentTarget.dataset.date;
     this.setData({ selectedDate: dateStr });
     this.loadSelectedDateTodos();
@@ -168,27 +168,27 @@ Page({
     this.setData({ showEventModal: false });
   },
 
-  onEventTitleInput(e: any) {
+  onEventTitleInput(e) {
     this.setData({
       'newEvent.title': e.detail.value
     });
   },
 
-  selectEventType(e: any) {
+  selectEventType(e) {
     this.setData({
       'newEvent.type': e.currentTarget.dataset.type
     });
   },
 
-  onEventTimeChange(e: any) {
+  onEventTimeChange(e) {
     this.setData({
       'newEvent.time': e.detail.value
     });
   },
 
-  createEventFromTodo(e: any) {
+  createEventFromTodo(e) {
     const todoId = e.currentTarget.dataset.id;
-    const todo = wx.getStorageSync('todo_list').find((t: any) => t.id === todoId);
+    const todo = wx.getStorageSync('todo_list').find((t) => t.id === todoId);
     
     if (todo) {
       this.setData({
@@ -202,7 +202,7 @@ Page({
     }
   },
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount) {
     return `¥${Number(amount || 0).toLocaleString('zh-CN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0

@@ -1,6 +1,6 @@
 App<IAppOption>({
   globalData: {
-    userInfo: null,
+    userInfo,
     hasUserInfo: false
   },
   
@@ -25,7 +25,7 @@ App<IAppOption>({
         groomName: '',
         brideName: '',
         coverImage: '',
-        countdownEvents: [],
+        countdownEvents,
         enableReminder: true,
         reminderDays: [7, 30]
       });
@@ -47,7 +47,7 @@ App<IAppOption>({
         totalBudget: 0,
         totalSpent: 0,
         warningThreshold: 80,
-        records: []
+        records
       });
     }
     

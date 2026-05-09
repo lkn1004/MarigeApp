@@ -1,20 +1,20 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { TODO_CATEGORIES } = require('../../data/categories');
 const { BUDGET_TEMPLATES } = require('../../data/templates');
 const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    budget: null as any,
+    budget,
     totalBudget: 0,
     totalSpent: 0,
     remaining: 0,
     percentage: 0,
-    categoryStats: [] as any[],
-    recentRecords: [] as any[],
+    categoryStats,
+    recentRecords,
     showAddModal: false,
     showTemplateModal: false,
-    selectedTemplate: null as any,
+    selectedTemplate,
     newRecord: {
       description: '',
       amount: '',
@@ -35,7 +35,7 @@ Page({
     this.loadBudget();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -68,8 +68,8 @@ Page({
     });
   },
 
-  calculateCategoryStats(records: any[], todoList: any[]) {
-    const stats: any[] = [];
+  calculateCategoryStats(records, todoList) {
+    const stats = [];
     
     TODO_CATEGORIES.forEach(category => {
       const categoryRecords = records.filter(r => r.category === category.id);
@@ -115,31 +115,31 @@ Page({
     this.setData({ showTemplateModal: false });
   },
 
-  onDescriptionInput(e: any) {
+  onDescriptionInput(e) {
     this.setData({
       'newRecord.description': e.detail.value
     });
   },
 
-  onAmountInput(e: any) {
+  onAmountInput(e) {
     this.setData({
       'newRecord.amount': e.detail.value
     });
   },
 
-  selectCategory(e: any) {
+  selectCategory(e) {
     this.setData({
       'newRecord.category': e.currentTarget.dataset.category
     });
   },
 
-  onDateChange(e: any) {
+  onDateChange(e) {
     this.setData({
       'newRecord.date': e.detail.value
     });
   },
 
-  selectStatus(e: any) {
+  selectStatus(e) {
     this.setData({
       'newRecord.status': e.currentTarget.dataset.status
     });
@@ -184,7 +184,7 @@ Page({
     });
   },
 
-  selectTemplate(e: any) {
+  selectTemplate(e) {
     const templateId = e.currentTarget.dataset.id;
     const template = BUDGET_TEMPLATES.find(t => t.id === templateId);
     
@@ -236,7 +236,7 @@ Page({
     });
   },
 
-  deleteRecord(e: any) {
+  deleteRecord(e) {
     const recordId = e.currentTarget.dataset.id;
     
     wx.showModal({
@@ -245,10 +245,10 @@ Page({
       success: (res) => {
         if (res.confirm) {
           const budget = wx.getStorageSync('budget') || {};
-          const record = budget.records.find((r: any) => r.id === recordId);
+          const record = budget.records.find(r => r.id === recordId);
           
           if (record) {
-            budget.records = budget.records.filter((r: any) => r.id !== recordId);
+            budget.records = budget.records.filter(r => r.id !== recordId);
             budget.totalSpent = Math.max(0, (budget.totalSpent || 0) - record.amount);
             wx.setStorageSync('budget', budget);
             this.loadBudget();
@@ -266,7 +266,7 @@ Page({
     });
   },
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount) {
     return `¥${Number(amount || 0).toLocaleString('zh-CN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0

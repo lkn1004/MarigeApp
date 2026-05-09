@@ -1,11 +1,11 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { TODO_CATEGORIES } = require('../../data/categories');
 const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    todos: [] as any[],
-    filteredTodos: [] as any[],
+    todos as any[],
+    filteredTodos as any[],
     categories: TODO_CATEGORIES,
     selectedCategory: 'all',
     selectedPriority: 'all',
@@ -13,7 +13,7 @@ Page({
     searchKeyword: '',
     showFilter: false,
     showAddModal: false,
-    editingTodo: null as any,
+    editingTodo as any,
     newTodo: {
       title: '',
       category: 'other',
@@ -29,7 +29,7 @@ Page({
     sortOrder: 'asc',
     viewMode: 'list',
     showBatchActions: false,
-    selectedTodos: [] as string[],
+    selectedTodos as string[],
     loading: true
   },
 
@@ -46,7 +46,7 @@ Page({
     wx.stopPullDownRefresh();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -58,7 +58,7 @@ Page({
     
     const todoList = wx.getStorageSync('todo_list') || [];
     
-    const todosWithCategory = todoList.map((todo: any) => {
+    const todosWithCategory = todoList.map((todo) => {
       const category = TODO_CATEGORIES.find(c => c.id === todo.category);
       return {
         ...todo,
@@ -126,7 +126,7 @@ Page({
     this.setData({ filteredTodos: filtered });
   },
 
-  onSearch(e: any) {
+  onSearch(e) {
     this.setData({ searchKeyword: e.detail.value });
     this.applyFilters();
   },
@@ -135,25 +135,25 @@ Page({
     this.setData({ showFilter: !this.data.showFilter });
   },
 
-  selectCategory(e: any) {
+  selectCategory(e) {
     const category = e.currentTarget.dataset.category;
     this.setData({ selectedCategory: category });
     this.applyFilters();
   },
 
-  selectPriority(e: any) {
+  selectPriority(e) {
     const priority = e.currentTarget.dataset.priority;
     this.setData({ selectedPriority: priority });
     this.applyFilters();
   },
 
-  selectStatus(e: any) {
+  selectStatus(e) {
     const status = e.currentTarget.dataset.status;
     this.setData({ selectedStatus: status });
     this.applyFilters();
   },
 
-  changeSort(e: any) {
+  changeSort(e) {
     const sortBy = e.currentTarget.dataset.sort;
     if (this.data.sortBy === sortBy) {
       this.setData({ 
@@ -177,7 +177,7 @@ Page({
   openAddModal() {
     this.setData({
       showAddModal: true,
-      editingTodo: null,
+      editingTodo,
       newTodo: {
         title: '',
         category: 'other',
@@ -193,37 +193,37 @@ Page({
     this.setData({ showAddModal: false });
   },
 
-  onTitleInput(e: any) {
+  onTitleInput(e) {
     this.setData({
       'newTodo.title': e.detail.value
     });
   },
 
-  onNotesInput(e: any) {
+  onNotesInput(e) {
     this.setData({
       'newTodo.notes': e.detail.value
     });
   },
 
-  onBudgetInput(e: any) {
+  onBudgetInput(e) {
     this.setData({
       'newTodo.budget': e.detail.value
     });
   },
 
-  selectNewCategory(e: any) {
+  selectNewCategory(e) {
     this.setData({
       'newTodo.category': e.currentTarget.dataset.category
     });
   },
 
-  selectNewPriority(e: any) {
+  selectNewPriority(e) {
     this.setData({
       'newTodo.priority': e.currentTarget.dataset.priority
     });
   },
 
-  onDueDateChange(e: any) {
+  onDueDateChange(e) {
     this.setData({
       'newTodo.dueDate': e.detail.value
     });
@@ -244,7 +244,7 @@ Page({
     const now = this.formatDate(new Date());
     
     if (this.data.editingTodo) {
-      const index = todoList.findIndex((t: any) => t.id === this.data.editingTodo.id);
+      const index = todoList.findIndex((t) => t.id === this.data.editingTodo.id);
       if (index !== -1) {
         todoList[index] = {
           ...todoList[index],
@@ -253,7 +253,7 @@ Page({
           priority: newTodo.priority,
           dueDate: newTodo.dueDate,
           notes: newTodo.notes,
-          budget: newTodo.budget ? parseFloat(newTodo.budget) : null,
+          budget: newTodo.budget ? parseFloat(newTodo.budget) ,
           updatedAt: now
         };
       }
@@ -265,10 +265,10 @@ Page({
         priority: newTodo.priority,
         dueDate: newTodo.dueDate,
         completed: false,
-        completedAt: null,
+        completedAt,
         notes: newTodo.notes,
-        budget: newTodo.budget ? parseFloat(newTodo.budget) : null,
-        subtasks: [],
+        budget: newTodo.budget ? parseFloat(newTodo.budget) ,
+        subtasks,
         createdAt: now,
         updatedAt: now
       };
@@ -285,16 +285,16 @@ Page({
     });
   },
 
-  toggleTodoComplete(e: any) {
+  toggleTodoComplete(e) {
     const todoId = e.currentTarget.dataset.id;
     const todoList = wx.getStorageSync('todo_list') || [];
     
-    const updatedList = todoList.map((todo: any) => {
+    const updatedList = todoList.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
           completed: !todo.completed,
-          completedAt: !todo.completed ? this.formatDate(new Date()) : null
+          completedAt: !todo.completed ? this.formatDate(new Date()) 
         };
       }
       return todo;
@@ -304,9 +304,9 @@ Page({
     this.loadTodos();
   },
 
-  editTodo(e: any) {
+  editTodo(e) {
     const todoId = e.currentTarget.dataset.id;
-    const todo = this.data.todos.find((t: any) => t.id === todoId);
+    const todo = this.data.todos.find((t) => t.id === todoId);
     
     if (todo) {
       this.setData({
@@ -324,7 +324,7 @@ Page({
     }
   },
 
-  deleteTodo(e: any) {
+  deleteTodo(e) {
     const todoId = e.currentTarget.dataset.id;
     
     wx.showModal({
@@ -333,7 +333,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           const todoList = wx.getStorageSync('todo_list') || [];
-          const updatedList = todoList.filter((t: any) => t.id !== todoId);
+          const updatedList = todoList.filter((t) => t.id !== todoId);
           wx.setStorageSync('todo_list', updatedList);
           this.loadTodos();
           
@@ -346,7 +346,7 @@ Page({
     });
   },
 
-  goToDetail(e: any) {
+  goToDetail(e) {
     const todoId = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/todo/todo-detail/todo-detail?id=${todoId}`
@@ -356,11 +356,11 @@ Page({
   toggleBatchSelect() {
     this.setData({
       showBatchActions: !this.data.showBatchActions,
-      selectedTodos: []
+      selectedTodos
     });
   },
 
-  selectTodo(e: any) {
+  selectTodo(e) {
     const todoId = e.currentTarget.dataset.id;
     const selectedTodos = this.data.selectedTodos;
     
@@ -380,7 +380,7 @@ Page({
     const todoList = wx.getStorageSync('todo_list') || [];
     const now = this.formatDate(new Date());
     
-    const updatedList = todoList.map((todo: any) => {
+    const updatedList = todoList.map((todo) => {
       if (this.data.selectedTodos.includes(todo.id)) {
         return {
           ...todo,
@@ -411,7 +411,7 @@ Page({
         if (res.confirm) {
           const todoList = wx.getStorageSync('todo_list') || [];
           const updatedList = todoList.filter(
-            (t: any) => !this.data.selectedTodos.includes(t.id)
+            (t) => !this.data.selectedTodos.includes(t.id)
           );
           wx.setStorageSync('todo_list', updatedList);
           this.loadTodos();

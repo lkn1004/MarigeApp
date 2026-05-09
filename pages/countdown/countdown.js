@@ -1,16 +1,16 @@
-const app = getApp<IAppOption>();
+const app = getApp();
 const { getDaysUntil, getTimeUntil, formatDate } = require('../../utils/date');
 
 Page({
   data: {
     weddingDate: '',
     daysUntil: 0,
-    timeUntil: null as any,
-    settings: null as any,
-    countdownEvents: [] as any[],
-    milestones: [] as any[],
-    timer: null as null,
-    currentTime: null as any,
+    timeUntil as any,
+    settings as any,
+    countdownEvents as any[],
+    milestones as any[],
+    timer as null,
+    currentTime as any,
     loading: true
   },
 
@@ -27,7 +27,7 @@ Page({
     this.stopTimer();
   },
 
-  formatDate(date: Date): string {
+  formatDate(date: Date) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -50,8 +50,8 @@ Page({
     }
     
     const upcomingTodos = todoList
-      .filter((t: any) => t.dueDate && !t.completed && t.dueDate >= this.formatDate(new Date()))
-      .sort((a: any, b: any) => a.dueDate.localeCompare(b.dueDate))
+      .filter((t) => t.dueDate && !t.completed && t.dueDate >= this.formatDate(new Date()))
+      .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
       .slice(0, 5);
     
     this.setData({
@@ -84,7 +84,7 @@ Page({
   stopTimer() {
     if (this.data.timer) {
       clearInterval(this.data.timer);
-      this.setData({ timer: null });
+      this.setData({ timer });
     }
   },
 
@@ -100,7 +100,7 @@ Page({
     });
   },
 
-  formatCurrency(amount: number): string {
+  formatCurrency(amount) {
     return `¥${Number(amount || 0).toLocaleString('zh-CN', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
