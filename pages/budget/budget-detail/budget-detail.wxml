@@ -1,0 +1,42 @@
+<view class="page">
+  <view class="container">
+    <!-- 预算概览 -->
+    <view class="overview-card">
+      <view class="overview-header">
+        <text class="overview-label">总预算</text>
+        <text class="overview-amount">¥{{budget.totalBudget || 0}}</text>
+      </view>
+      <view class="overview-stats">
+        <view class="stat-item">
+          <text class="stat-label">已支出</text>
+          <text class="stat-value spent">¥{{budget.totalSpent || 0}}</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-label">剩余</text>
+          <text class="stat-value remaining">¥{{(budget.totalBudget || 0) - (budget.totalSpent || 0)}}</text>
+        </view>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{percentage}}%"></view>
+      </view>
+      <text class="progress-text">{{percentage}}%</text>
+    </view>
+
+    <!-- 支出记录列表 -->
+    <view class="records-section">
+      <view class="section-title">支出记录</view>
+      <view class="record-list" wx:if="{{records && records.length > 0}}">
+        <view class="record-item" wx:for="{{records}}" wx:key="id">
+          <view class="record-info">
+            <text class="record-desc">{{item.description}}</text>
+            <text class="record-date">{{item.date}}</text>
+          </view>
+          <view class="record-amount">-¥{{item.amount}}</view>
+        </view>
+      </view>
+      <view class="empty-state" wx:if="{{!records || records.length === 0}}">
+        <text>暂无支出记录</text>
+      </view>
+    </view>
+  </view>
+</view>

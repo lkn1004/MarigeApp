@@ -1,0 +1,141 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+.container {
+  padding: var(--spacing-md);
+}
+
+.overview-card {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border-radius: var(--radius-lg);
+  padding: 40rpx 32rpx;
+  color: white;
+  margin-bottom: var(--spacing-md);
+}
+
+.overview-header {
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.overview-label {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.overview-amount {
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.overview-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+}
+
+.stat-value.spent {
+  color: white;
+}
+
+.stat-value.remaining {
+  color: #90EE90;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: rgba(255,255,255,0.3);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: center;
+  margin-top: 12rpx;
+}
+
+.records-section {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20rpx;
+}
+
+.record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.record-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.record-desc {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.record-date {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.record-amount {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--error-color);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60rpx;
+  color: var(--text-tertiary);
+}
