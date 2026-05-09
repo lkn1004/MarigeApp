@@ -7,10 +7,10 @@ Page({
     currentYear: new Date().getFullYear(),
     currentMonth: new Date().getMonth(),
     weekDays: getWeekDays(),
-    monthDays,
+    monthDays: [],
     selectedDate: '',
-    selectedTodos,
-    selectedEvents,
+    selectedTodos: [],
+    selectedEvents: [],
     viewMode: 'month',
     showEventModal: false,
     newEvent: {
@@ -24,7 +24,7 @@ Page({
       { id: 'meeting', name: '沟通会议', color: '#1890FF' },
       { id: 'payment', name: '付款日期', color: '#D4AF37' }
     ],
-    weddingSettings,
+    weddingSettings: null,
     loading: true
   },
 
@@ -83,7 +83,7 @@ Page({
     this.setData({ monthDays: daysWithTodos });
   },
 
-  isWeddingDay(dateStr): boolean {
+  isWeddingDay(dateStr) {
     const settings = wx.getStorageSync('wedding_settings');
     return settings && settings.weddingDate === dateStr;
   },
