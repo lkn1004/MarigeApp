@@ -1,0 +1,77 @@
+<view class="page">
+  <view class="container">
+    <!-- 头部说明 -->
+    <view class="header-card">
+      <view class="header-content">
+        <text class="header-icon">📋</text>
+        <view class="header-text">
+          <text class="header-title">婚礼筹备清单</text>
+          <text class="header-desc">根据婚礼筹备周期，为您准备了完整的待办清单</text>
+        </view>
+      </view>
+      <button class="apply-all-btn" bindtap="applyAllTimelines">
+        一键添加全部
+      </button>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-actions">
+      <view class="quick-btn" bindtap="goToTodo">
+        <text class="quick-icon">📋</text>
+        <text class="quick-text">查看待办</text>
+      </view>
+    </view>
+
+    <!-- 时间线列表 -->
+    <view class="timeline-list">
+      <view 
+        class="timeline-item card"
+        wx:for="{{timelines}}"
+        wx:key="id"
+      >
+        <view 
+          class="timeline-header"
+          data-id="{{item.id}}"
+          bindtap="toggleTimeline"
+        >
+          <view class="timeline-info">
+            <text class="timeline-icon">{{item.id === 'weddingDay' ? '💒' : item.id === 'afterWedding' ? '🎉' : '📅'}}</text>
+            <view class="timeline-content">
+              <text class="timeline-name">{{item.name}}</text>
+              <text class="timeline-count">{{getTimelineCount(item.id)}} 项</text>
+            </view>
+          </view>
+          <view class="timeline-expand">
+            <text class="expand-icon {{expandedTimelines.indexOf(item.id) !== -1 ? 'expanded' : ''}}">›</text>
+          </view>
+        </view>
+
+        <view class="timeline-body {{expandedTimelines.indexOf(item.id) !== -1 ? 'show' : ''}}">
+          <view class="checklist-items">
+            <view 
+              class="checklist-item"
+              wx:for="{{getChecklistItems(item.id)}}"
+              wx:key="title"
+            >
+              <text class="item-bullet">•</text>
+              <text class="item-title">{{item.title}}</text>
+              <view class="item-tag tag-{{item.priority}}">
+                {{item.priority === 'high' ? '高' : item.priority === 'medium' ? '中' : '低'}}
+              </view>
+            </view>
+          </view>
+
+          <view class="timeline-actions">
+            <button 
+              class="apply-btn"
+              data-id="{{item.id}}"
+              bindtap="applyTimeline"
+            >
+              应用此清单
+            </button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

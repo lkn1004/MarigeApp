@@ -1,0 +1,353 @@
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索待办事项..."
+        value="{{searchKeyword}}"
+        bindinput="onSearch"
+      />
+    </view>
+    <view class="search-actions">
+      <view class="action-btn {{showFilter ? 'active' : ''}}" bindtap="toggleFilter">
+        <text>筛选</text>
+      </view>
+      <view class="action-btn" bindtap="goToChecklist">
+        <text>模板</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 筛选面板 -->
+  <view class="filter-panel {{showFilter ? 'show' : ''}}">
+    <!-- 分类筛选 -->
+    <view class="filter-section">
+      <text class="filter-label">分类</text>
+      <scroll-view class="filter-scroll" scroll-x>
+        <view class="filter-tags">
+          <view 
+            class="filter-tag {{selectedCategory === 'all' ? 'active' : ''}}" 
+            data-category="all"
+            bindtap="selectCategory"
+          >
+            全部
+          </view>
+          <view 
+            class="filter-tag {{selectedCategory === category.id ? 'active' : ''}}"
+            wx:for="{{categories}}"
+            wx:key="id"
+            data-category="{{category.id}}"
+            bindtap="selectCategory"
+            style="background: {{selectedCategory === category.id ? category.color : ''}}"
+          >
+            {{category.name}}
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 优先级筛选 -->
+    <view class="filter-section">
+      <text class="filter-label">优先级</text>
+      <view class="filter-tags">
+        <view 
+          class="filter-tag {{selectedPriority === 'all' ? 'active' : ''}}"
+          data-priority="all"
+          bindtap="selectPriority"
+        >
+          全部
+        </view>
+        <view 
+          class="filter-tag priority-high {{selectedPriority === 'high' ? 'active' : ''}}"
+          data-priority="high"
+          bindtap="selectPriority"
+        >
+          高
+        </view>
+        <view 
+          class="filter-tag priority-medium {{selectedPriority === 'medium' ? 'active' : ''}}"
+          data-priority="medium"
+          bindtap="selectPriority"
+        >
+          中
+        </view>
+        <view 
+          class="filter-tag priority-low {{selectedPriority === 'low' ? 'active' : ''}}"
+          data-priority="low"
+          bindtap="selectPriority"
+        >
+          低
+        </view>
+      </view>
+    </view>
+
+    <!-- 状态筛选 -->
+    <view class="filter-section">
+      <text class="filter-label">状态</text>
+      <view class="filter-tags">
+        <view 
+          class="filter-tag {{selectedStatus === 'all' ? 'active' : ''}}"
+          data-status="all"
+          bindtap="selectStatus"
+        >
+          全部
+        </view>
+        <view 
+          class="filter-tag {{selectedStatus === 'pending' ? 'active' : ''}}"
+          data-status="pending"
+          bindtap="selectStatus"
+        >
+          待完成
+        </view>
+        <view 
+          class="filter-tag {{selectedStatus === 'completed' ? 'active' : ''}}"
+          data-status="completed"
+          bindtap="selectStatus"
+        >
+          已完成
+        </view>
+        <view 
+          class="filter-tag {{selectedStatus === 'overdue' ? 'active' : ''}}"
+          data-status="overdue"
+          bindtap="selectStatus"
+        >
+          已过期
+        </view>
+      </view>
+    </view>
+
+    <!-- 筛选操作 -->
+    <view class="filter-actions">
+      <button class="filter-reset" bindtap="resetFilters">重置</button>
+      <button class="filter-confirm" bindtap="toggleFilter">确定</button>
+    </view>
+  </view>
+
+  <!-- 排序和视图切换 -->
+  <view class="toolbar">
+    <view class="sort-info">
+      <text class="result-count">共 {{filteredTodos.length}} 项</text>
+    </view>
+    <view class="toolbar-actions">
+      <view class="sort-btn" bindtap="changeSort" data-sort="dueDate">
+        <text>按日期</text>
+        <text class="sort-icon" wx:if="{{sortBy === 'dueDate'}}">{{sortOrder === 'asc' ? '↑' : '↓'}}</text>
+      </view>
+      <view class="sort-btn" bindtap="changeSort" data-sort="priority">
+        <text>按优先级</text>
+        <text class="sort-icon" wx:if="{{sortBy === 'priority'}}">{{sortOrder === 'asc' ? '↑' : '↓'}}</text>
+      </view>
+      <view class="view-toggle" bindtap="toggleViewMode">
+        <text>{{viewMode === 'list' ? '📋' : '🔲'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 待办列表 -->
+  <view class="todo-container">
+    <!-- 列表视图 -->
+    <view class="todo-list" wx:if="{{viewMode === 'list'}}">
+      <view 
+        class="todo-card {{item.completed ? 'completed' : ''}} {{item.dueDate && item.dueDate < currentDate && !item.completed ? 'overdue' : ''}}"
+        wx:for="{{filteredTodos}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToDetail"
+      >
+        <view class="todo-main" bindtap="toggleTodoComplete" data-id="{{item.id}}">
+          <view class="todo-checkbox {{item.completed ? 'checked' : ''}}">
+            <text wx:if="{{item.completed}}">✓</text>
+          </view>
+          <view class="todo-content">
+            <view class="todo-header">
+              <text class="todo-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
+              <view class="priority-badge priority-{{item.priority}}">
+                {{item.priority === 'high' ? '高' : item.priority === 'medium' ? '中' : '低'}}
+              </view>
+            </view>
+            <view class="todo-meta">
+              <view class="category-tag" style="background: {{item.categoryColor}}20; color: {{item.categoryColor}}">
+                {{item.categoryName}}
+              </view>
+              <text class="due-date" wx:if="{{item.dueDate}}">
+                📅 {{item.dueDate}}
+              </text>
+            </view>
+          </view>
+        </view>
+        <view class="todo-actions">
+          <view class="action-icon" bindtap="editTodo" data-id="{{item.id}}">
+            <text>✏️</text>
+          </view>
+          <view class="action-icon" bindtap="deleteTodo" data-id="{{item.id}}">
+            <text>🗑️</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 网格视图 -->
+    <view class="todo-grid" wx:if="{{viewMode === 'grid'}}">
+      <view 
+        class="grid-card {{item.completed ? 'completed' : ''}}"
+        wx:for="{{filteredTodos}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToDetail"
+      >
+        <view class="grid-checkbox" bindtap="toggleTodoComplete" data-id="{{item.id}}">
+          <view class="checkbox {{item.completed ? 'checked' : ''}}">
+            <text wx:if="{{item.completed}}">✓</text>
+          </view>
+        </view>
+        <view class="grid-content">
+          <text class="grid-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
+          <view class="grid-category" style="background: {{item.categoryColor}}20; color: {{item.categoryColor}}">
+            {{item.categoryName}}
+          </view>
+        </view>
+        <view class="priority-dot priority-{{item.priority}}"></view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{filteredTodos.length === 0 && !loading}}">
+      <text class="empty-icon">📋</text>
+      <text class="empty-text">暂无待办事项</text>
+      <text class="empty-hint">点击下方按钮添加第一个待办</text>
+    </view>
+  </view>
+
+  <!-- 批量操作栏 -->
+  <view class="batch-actions {{showBatchActions ? 'show' : ''}}" wx:if="{{showBatchActions}}">
+    <view class="batch-info">
+      <text>已选择 {{selectedTodos.length}} 项</text>
+    </view>
+    <view class="batch-buttons">
+      <button class="batch-btn complete" bindtap="batchComplete">完成</button>
+      <button class="batch-btn delete" bindtap="batchDelete">删除</button>
+      <button class="batch-btn cancel" bindtap="toggleBatchSelect">取消</button>
+    </view>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal {{showAddModal ? 'show' : ''}}" wx:if="{{showAddModal}}">
+    <view class="modal-mask" bindtap="closeAddModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{editingTodo ? '编辑待办' : '添加待办'}}</text>
+        <view class="modal-close" bindtap="closeAddModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <!-- 标题 -->
+        <view class="form-item">
+          <text class="form-label">标题 *</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入待办事项"
+            value="{{newTodo.title}}"
+            bindinput="onTitleInput"
+          />
+        </view>
+
+        <!-- 分类 -->
+        <view class="form-item">
+          <text class="form-label">分类</text>
+          <scroll-view class="category-scroll" scroll-x>
+            <view class="category-options">
+              <view 
+                class="category-option {{newTodo.category === category.id ? 'selected' : ''}}"
+                wx:for="{{categories}}"
+                wx:key="id"
+                data-category="{{category.id}}"
+                bindtap="selectNewCategory"
+                style="background: {{newTodo.category === category.id ? category.color : ''}}"
+              >
+                {{category.name}}
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <!-- 优先级 -->
+        <view class="form-item">
+          <text class="form-label">优先级</text>
+          <view class="priority-options">
+            <view 
+              class="priority-option priority-high {{newTodo.priority === 'high' ? 'selected' : ''}}"
+              data-priority="high"
+              bindtap="selectNewPriority"
+            >
+              高
+            </view>
+            <view 
+              class="priority-option priority-medium {{newTodo.priority === 'medium' ? 'selected' : ''}}"
+              data-priority="medium"
+              bindtap="selectNewPriority"
+            >
+              中
+            </view>
+            <view 
+              class="priority-option priority-low {{newTodo.priority === 'low' ? 'selected' : ''}}"
+              data-priority="low"
+              bindtap="selectNewPriority"
+            >
+              低
+            </view>
+          </view>
+        </view>
+
+        <!-- 截止日期 -->
+        <view class="form-item">
+          <text class="form-label">截止日期</text>
+          <picker 
+            mode="date" 
+            value="{{newTodo.dueDate}}" 
+            bindchange="onDueDateChange"
+          >
+            <view class="date-picker">
+              <text>{{newTodo.dueDate || '请选择日期'}}</text>
+              <text class="picker-icon">📅</text>
+            </view>
+          </picker>
+        </view>
+
+        <!-- 预算 -->
+        <view class="form-item">
+          <text class="form-label">预算金额</text>
+          <input 
+            class="form-input" 
+            type="digit"
+            placeholder="请输入预算金额"
+            value="{{newTodo.budget}}"
+            bindinput="onBudgetInput"
+          />
+        </view>
+
+        <!-- 备注 -->
+        <view class="form-item">
+          <text class="form-label">备注</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="添加备注信息..."
+            value="{{newTodo.notes}}"
+            bindinput="onNotesInput"
+          ></textarea>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeAddModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveTodo">保存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <view class="fab" bindtap="openAddModal" wx:if="{{!showAddModal && !showBatchActions}}">
+    <text>+</text>
+  </view>
+</view>

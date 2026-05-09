@@ -1,0 +1,124 @@
+<view class="page" wx:if="{{todo}}">
+  <view class="container">
+    <!-- 状态卡片 -->
+    <view class="status-card {{todo.completed ? 'completed' : ''}}">
+      <view class="status-header">
+        <view class="status-checkbox {{todo.completed ? 'checked' : ''}}" bindtap="toggleComplete">
+          <text wx:if="{{todo.completed}}">✓</text>
+        </view>
+        <view class="status-info">
+          <text class="status-text">{{todo.completed ? '已完成' : '待完成'}}</text>
+          <text class="status-date" wx:if="{{todo.completed && todo.completedAt}}">完成于 {{todo.completedAt}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 标题和分类 -->
+    <view class="main-card card">
+      <text class="todo-title">{{todo.title}}</text>
+      
+      <view class="meta-row">
+        <view class="category-tag" style="background: {{categoryInfo.color}}20; color: {{categoryInfo.color}}">
+          {{categoryInfo.name}}
+        </view>
+        <view class="priority-tag priority-{{todo.priority}}">
+          {{priorityInfo.name}}优先级
+        </view>
+      </view>
+
+      <view class="info-list">
+        <view class="info-item" wx:if="{{todo.dueDate}}">
+          <text class="info-icon">📅</text>
+          <text class="info-label">截止日期</text>
+          <text class="info-value">{{todo.dueDate}}</text>
+        </view>
+
+        <view class="info-item" wx:if="{{todo.budget}}">
+          <text class="info-icon">💰</text>
+          <text class="info-label">预算</text>
+          <text class="info-value">{{formatCurrency(todo.budget)}}</text>
+        </view>
+
+        <view class="info-item" wx:if="{{supplier}}">
+          <text class="info-icon">🏪</text>
+          <text class="info-label">供应商</text>
+          <text class="info-value" bindtap="goToSupplier">{{supplier.name}}</text>
+        </view>
+
+        <view class="info-item">
+          <text class="info-icon">📝</text>
+          <text class="info-label">创建时间</text>
+          <text class="info-value">{{todo.createdAt}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="notes-card card" wx:if="{{todo.notes}}">
+      <text class="section-title">备注</text>
+      <text class="notes-content">{{todo.notes}}</text>
+    </view>
+
+    <!-- 子任务 -->
+    <view class="subtasks-card card">
+      <view class="section-header">
+        <text class="section-title">子任务</text>
+        <view class="add-subtask-btn" bindtap="showAddSubtaskModal">
+          <text>+</text>
+        </view>
+      </view>
+
+      <view class="subtask-list" wx:if="{{todo.subtasks && todo.subtasks.length > 0}}">
+        <view class="subtask-item" wx:for="{{todo.subtasks}}" wx:key="id">
+          <view class="subtask-checkbox {{item.completed ? 'checked' : ''}}" 
+                bindtap="toggleSubtaskComplete" data-id="{{item.id}}">
+            <text wx:if="{{item.completed}}">✓</text>
+          </view>
+          <text class="subtask-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
+          <view class="subtask-delete" bindtap="deleteSubtask" data-id="{{item.id}}">
+            <text>×</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-subtasks" wx:if="{{!todo.subtasks || todo.subtasks.length === 0}}">
+        <text>暂无子任务</text>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="action-btn copy" bindtap="copyTodo">
+        <text>📋</text>
+        <text>复制待办</text>
+      </button>
+      <button class="action-btn delete" bindtap="deleteTodo">
+        <text>🗑️</text>
+        <text>删除</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 添加子任务弹窗 -->
+  <view class="modal {{showAddSubtask ? 'show' : ''}}" wx:if="{{showAddSubtask}}">
+    <view class="modal-mask" bindtap="hideAddSubtaskModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">添加子任务</text>
+      </view>
+      <view class="modal-body">
+        <input 
+          class="form-input" 
+          placeholder="请输入子任务标题"
+          value="{{newSubtaskTitle}}"
+          bindinput="onSubtaskTitleInput"
+          focus="{{showAddSubtask}}"
+        />
+      </view>
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="hideAddSubtaskModal">取消</button>
+        <button class="modal-btn confirm" bindtap="addSubtask">添加</button>
+      </view>
+    </view>
+  </view>
+</view>

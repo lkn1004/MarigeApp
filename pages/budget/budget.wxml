@@ -1,0 +1,232 @@
+<view class="page">
+  <view class="container">
+    <!-- 预算概览卡片 -->
+    <view class="overview-card">
+      <view class="overview-header">
+        <text class="overview-label">总预算</text>
+        <text class="overview-amount">{{formatCurrency(totalBudget)}}</text>
+      </view>
+      
+      <view class="overview-stats">
+        <view class="stat-item">
+          <text class="stat-label">已支出</text>
+          <text class="stat-value spent">{{formatCurrency(totalSpent)}}</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item">
+          <text class="stat-label">剩余</text>
+          <text class="stat-value remaining">{{formatCurrency(remaining)}}</text>
+        </view>
+      </view>
+
+      <view class="progress-section">
+        <view class="progress-bar">
+          <view 
+            class="progress-fill {{percentage > 90 ? 'warning' : ''}}"
+            style="width: {{percentage}}%"
+          ></view>
+        </view>
+        <text class="progress-text">{{percentage}}%</text>
+      </view>
+    </view>
+
+    <!-- 快捷操作 -->
+    <view class="quick-actions">
+      <view class="action-btn" bindtap="setTotalBudget">
+        <text>💰</text>
+        <text>设置预算</text>
+      </view>
+      <view class="action-btn" bindtap="openTemplateModal">
+        <text>📋</text>
+        <text>模板</text>
+      </view>
+      <view class="action-btn" bindtap="openAddModal">
+        <text>➕</text>
+        <text>添加支出</text>
+      </view>
+      <view class="action-btn" bindtap="goToDetail">
+        <text>📊</text>
+        <text>详情</text>
+      </view>
+    </view>
+
+    <!-- 分类统计 -->
+    <view class="section-card card">
+      <view class="section-header">
+        <text class="section-title">分类支出</text>
+      </view>
+
+      <view class="category-list">
+        <view class="category-item" wx:for="{{categoryStats}}" wx:key="id" wx:if="{{item.spent > 0 || item.planned > 0}}">
+          <view class="category-info">
+            <view class="category-color" style="background: {{item.color}}"></view>
+            <text class="category-name">{{item.name}}</text>
+          </view>
+          <view class="category-amount">
+            <text class="spent-amount">{{formatCurrency(item.spent)}}</text>
+            <text class="planned-amount" wx:if="{{item.planned > 0}}"> / {{formatCurrency(item.planned)}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-category" wx:if="{{categoryStats.every(item => item.spent === 0 && item.planned === 0)}}">
+        <text>暂无支出记录</text>
+      </view>
+    </view>
+
+    <!-- 最近支出 -->
+    <view class="section-card card">
+      <view class="section-header">
+        <text class="section-title">最近支出</text>
+      </view>
+
+      <view class="record-list">
+        <view class="record-item" wx:for="{{recentRecords}}" wx:key="id">
+          <view class="record-left">
+            <text class="record-description">{{item.description}}</text>
+            <view class="record-meta">
+              <text class="record-date">{{item.date}}</text>
+              <view class="record-category" style="background: {{item.categoryInfo.color}}20; color: {{item.categoryInfo.color}}">
+                {{item.categoryInfo.name}}
+              </view>
+            </view>
+          </view>
+          <view class="record-right">
+            <text class="record-amount">-{{formatCurrency(item.amount)}}</text>
+            <view class="record-status {{item.status}}">
+              {{item.status === 'paid' ? '已付' : '待付'}}
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="empty-records" wx:if="{{recentRecords.length === 0}}">
+        <text>暂无支出记录</text>
+        <text class="empty-hint">点击上方"添加支出"开始记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加支出弹窗 -->
+  <view class="modal {{showAddModal ? 'show' : ''}}" wx:if="{{showAddModal}}">
+    <view class="modal-mask" bindtap="closeAddModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">添加支出</text>
+        <view class="modal-close" bindtap="closeAddModal">×</view>
+      </view>
+
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">描述 *</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入支出描述"
+            value="{{newRecord.description}}"
+            bindinput="onDescriptionInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">金额 *</text>
+          <input 
+            class="form-input amount-input" 
+            type="digit"
+            placeholder="0.00"
+            value="{{newRecord.amount}}"
+            bindinput="onAmountInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">分类</text>
+          <scroll-view class="category-scroll" scroll-x>
+            <view class="category-options">
+              <view 
+                class="category-option {{newRecord.category === category.id ? 'selected' : ''}}"
+                wx:for="{{categories}}"
+                wx:key="id"
+                data-category="{{category.id}}"
+                bindtap="selectCategory"
+                style="background: {{newRecord.category === category.id ? category.color : ''}}"
+              >
+                {{category.name}}
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">日期</text>
+          <picker mode="date" value="{{newRecord.date}}" bindchange="onDateChange">
+            <view class="date-picker">
+              <text>{{newRecord.date || '请选择日期'}}</text>
+              <text class="picker-icon">📅</text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">状态</text>
+          <view class="status-options">
+            <view 
+              class="status-option {{newRecord.status === 'paid' ? 'selected' : ''}}"
+              data-status="paid"
+              bindtap="selectStatus"
+            >
+              已付款
+            </view>
+            <view 
+              class="status-option {{newRecord.status === 'pending' ? 'selected' : ''}}"
+              data-status="pending"
+              bindtap="selectStatus"
+            >
+              待付款
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeAddModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveRecord">保存</button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预算模板弹窗 -->
+  <view class="modal {{showTemplateModal ? 'show' : ''}}" wx:if="{{showTemplateModal}}">
+    <view class="modal-mask" bindtap="closeTemplateModal"></view>
+    <view class="modal-content template-modal">
+      <view class="modal-header">
+        <text class="modal-title">选择预算模板</text>
+        <view class="modal-close" bindtap="closeTemplateModal">×</view>
+      </view>
+
+      <view class="modal-body">
+        <view class="template-list">
+          <view 
+            class="template-item {{selectedTemplate && selectedTemplate.id === template.id ? 'selected' : ''}}"
+            wx:for="{{templates}}"
+            wx:key="id"
+            data-id="{{template.id}}"
+            bindtap="selectTemplate"
+          >
+            <view class="template-info">
+              <text class="template-name">{{template.name}}</text>
+              <text class="template-amount">{{formatCurrency(template.total)}}</text>
+            </view>
+            <view class="template-check" wx:if="{{selectedTemplate && selectedTemplate.id === template.id}}">
+              ✓
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeTemplateModal">取消</button>
+        <button class="modal-btn confirm" bindtap="applyTemplate">应用模板</button>
+      </view>
+    </view>
+  </view>
+</view>

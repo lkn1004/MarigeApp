@@ -1,0 +1,93 @@
+<view class="page">
+  <view class="container">
+    <!-- 主倒计时卡片 -->
+    <view class="main-countdown">
+      <view class="countdown-header">
+        <text class="countdown-icon">💒</text>
+        <text class="countdown-title">婚礼倒计时</text>
+      </view>
+
+      <view class="countdown-date" wx:if="{{weddingDate}}">
+        <text>{{weddingDate}}</text>
+      </view>
+
+      <view class="countdown-display" wx:if="{{weddingDate && timeUntil}}">
+        <view class="countdown-unit">
+          <text class="unit-value">{{timeUntil.days}}</text>
+          <text class="unit-label">天</text>
+        </view>
+        <view class="unit-separator">:</view>
+        <view class="countdown-unit">
+          <text class="unit-value">{{timeUntil.hours}}</text>
+          <text class="unit-label">时</text>
+        </view>
+        <view class="unit-separator">:</view>
+        <view class="countdown-unit">
+          <text class="unit-value">{{timeUntil.minutes}}</text>
+          <text class="unit-label">分</text>
+        </view>
+        <view class="unit-separator">:</view>
+        <view class="countdown-unit">
+          <text class="unit-value">{{timeUntil.seconds}}</text>
+          <text class="unit-label">秒</text>
+        </view>
+      </view>
+
+      <view class="no-date" wx:if="{{!weddingDate}}">
+        <text class="no-date-text">还没有设置婚礼日期</text>
+        <button class="set-date-btn" bindtap="goToSettings">去设置</button>
+      </view>
+    </view>
+
+    <!-- 新人信息 -->
+    <view class="couple-card card" wx:if="{{settings && (settings.groomName || settings.brideName)}}">
+      <view class="couple-header">
+        <text class="couple-icon">👰🤵</text>
+        <text class="couple-title">新人信息</text>
+      </view>
+      <view class="couple-names">
+        <text class="name" wx:if="{{settings.groomName}}">{{settings.groomName}}</text>
+        <text class="and" wx:if="{{settings.groomName && settings.brideName}}">&</text>
+        <text class="name" wx:if="{{settings.brideName}}">{{settings.brideName}}</text>
+      </view>
+      <view class="venue-info" wx:if="{{settings.weddingVenue}}">
+        <text class="venue-icon">📍</text>
+        <text class="venue-text">{{settings.weddingVenue}}</text>
+      </view>
+    </view>
+
+    <!-- 即将到来 -->
+    <view class="upcoming-section card" wx:if="{{countdownEvents.length > 0}}">
+      <view class="section-header">
+        <text class="section-title">即将到来</text>
+        <text class="view-more" bindtap="goToTodo">查看全部 ›</text>
+      </view>
+
+      <view class="event-list">
+        <view class="event-item" wx:for="{{countdownEvents}}" wx:key="id">
+          <view class="event-date">
+            <text class="event-day">{{item.dueDate.substring(8, 10)}}</text>
+            <text class="event-month">{{item.dueDate.substring(5, 7)}}月</text>
+          </view>
+          <view class="event-content">
+            <text class="event-title">{{item.title}}</text>
+            <text class="event-days">{{getDaysUntil(item.dueDate)}}天后</text>
+          </view>
+          <view class="priority-dot priority-{{item.priority}}"></view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-links">
+      <view class="quick-link" bindtap="goToSettings">
+        <text class="link-icon">⚙️</text>
+        <text class="link-text">婚礼设置</text>
+      </view>
+      <view class="quick-link" bindtap="goToTodo">
+        <text class="link-icon">📋</text>
+        <text class="link-text">待办事项</text>
+      </view>
+    </view>
+  </view>
+</view>

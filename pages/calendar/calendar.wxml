@@ -1,0 +1,149 @@
+<view class="page">
+  <!-- 日历头部 -->
+  <view class="calendar-header">
+    <view class="calendar-nav">
+      <view class="nav-btn" bindtap="prevMonth">
+        <text>‹</text>
+      </view>
+      <view class="current-month">
+        <text class="month-text">{{currentYear}}年 {{getMonthName(currentMonth)}}</text>
+        <view class="today-btn" bindtap="goToToday">
+          <text>今天</text>
+        </view>
+      </view>
+      <view class="nav-btn" bindtap="nextMonth">
+        <text>›</text>
+      </view>
+    </view>
+
+    <!-- 星期标题 -->
+    <view class="week-header">
+      <view class="week-day" wx:for="{{weekDays}}" wx:key="index">{{item}}</view>
+    </view>
+  </view>
+
+  <!-- 日历网格 -->
+  <view class="calendar-grid">
+    <view 
+      class="calendar-day {{item.isCurrentMonth ? '' : 'other-month'}} {{item.isToday ? 'today' : ''}} {{selectedDate === item.fullDate ? 'selected' : ''}} {{item.hasHighPriority ? 'has-high' : ''}}"
+      wx:for="{{monthDays}}"
+      wx:key="index"
+      data-date="{{item.fullDate}}"
+      bindtap="selectDate"
+    >
+      <view class="day-number">{{item.date}}</view>
+      <view class="day-markers" wx:if="{{item.todoCount > 0}}">
+        <view class="marker todo-marker" wx:if="{{item.todoCount > 0}}"></view>
+        <view class="marker high-marker" wx:if="{{item.hasHighPriority}}"></view>
+        <view class="marker completed-marker" wx:if="{{item.hasCompleted}}"></view>
+      </view>
+      <view class="wedding-badge" wx:if="{{item.isWeddingDay}}">
+        <text>💒</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选中日期详情 -->
+  <view class="selected-detail">
+    <view class="detail-header">
+      <text class="detail-date">{{selectedDate}}</text>
+      <view class="detail-actions">
+        <view class="action-btn" bindtap="openEventModal">
+          <text>+</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-content" wx:if="{{selectedTodos.length > 0}}">
+      <view class="todo-list">
+        <view class="todo-item" wx:for="{{selectedTodos}}" wx:key="id">
+          <view class="todo-checkbox {{item.completed ? 'checked' : ''}}">
+            <text wx:if="{{item.completed}}">✓</text>
+          </view>
+          <view class="todo-content">
+            <text class="todo-title {{item.completed ? 'completed' : ''}}">{{item.title}}</text>
+            <view class="todo-meta">
+              <view class="category-tag" style="background: {{item.categoryColor}}20; color: {{item.categoryColor}}">
+                {{item.categoryName}}
+              </view>
+              <view class="priority-tag priority-{{item.priority}}">
+                {{item.priority === 'high' ? '高' : item.priority === 'medium' ? '中' : '低'}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="empty-detail" wx:if="{{selectedTodos.length === 0}}">
+      <text class="empty-icon">📅</text>
+      <text class="empty-text">这天没有待办事项</text>
+      <text class="empty-hint">点击右上角添加</text>
+    </view>
+  </view>
+
+  <!-- 婚礼倒计时信息 -->
+  <view class="wedding-info card" wx:if="{{weddingSettings && weddingSettings.weddingDate}}">
+    <view class="wedding-header">
+      <text class="wedding-icon">💒</text>
+      <view class="wedding-content">
+        <text class="wedding-title">婚礼日期</text>
+        <text class="wedding-date">{{weddingSettings.weddingDate}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加事件弹窗 -->
+  <view class="modal {{showEventModal ? 'show' : ''}}" wx:if="{{showEventModal}}">
+    <view class="modal-mask" bindtap="closeEventModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">添加待办</text>
+        <view class="modal-close" bindtap="closeEventModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">待办标题</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入待办事项"
+            value="{{newEvent.title}}"
+            bindinput="onEventTitleInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">事件类型</text>
+          <view class="type-options">
+            <view 
+              class="type-option {{newEvent.type === type.id ? 'selected' : ''}}"
+              wx:for="{{eventTypes}}"
+              wx:key="id"
+              data-type="{{type.id}}"
+              bindtap="selectEventType"
+              style="background: {{newEvent.type === type.id ? type.color : ''}}"
+            >
+              {{type.name}}
+            </view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">截止日期</text>
+          <picker mode="date" value="{{newEvent.time}}" bindchange="onEventTimeChange">
+            <view class="date-picker">
+              <text>{{newEvent.time || selectedDate}}</text>
+              <text class="picker-icon">📅</text>
+            </view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeEventModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveEvent">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

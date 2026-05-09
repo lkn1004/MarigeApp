@@ -1,0 +1,73 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/todo/todo",
+    "pages/todo/todo-detail/todo-detail",
+    "pages/todo/todo-edit/todo-edit",
+    "pages/calendar/calendar",
+    "pages/countdown/countdown",
+    "pages/budget/budget",
+    "pages/budget/budget-detail/budget-detail",
+    "pages/budget/budget-record/budget-record",
+    "pages/supplier/supplier",
+    "pages/supplier/supplier-detail/supplier-detail",
+    "pages/supplier/supplier-edit/supplier-edit",
+    "pages/guest/guest",
+    "pages/guest/guest-edit/guest-edit",
+    "pages/checklist/checklist",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "navigationBarTitleText": "备婚助手",
+    "navigationBarBackgroundColor": "#E8B4B8",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F8F8F8",
+    "enablePullDownRefresh": true
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#E8B4B8",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/todo/todo",
+        "text": "待办",
+        "iconPath": "assets/icons/todo.png",
+        "selectedIconPath": "assets/icons/todo-active.png"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "日历",
+        "iconPath": "assets/icons/calendar.png",
+        "selectedIconPath": "assets/icons/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/budget/budget",
+        "text": "预算",
+        "iconPath": "assets/icons/budget.png",
+        "selectedIconPath": "assets/icons/budget-active.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "我的",
+        "iconPath": "assets/icons/settings.png",
+        "selectedIconPath": "assets/icons/settings-active.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "van-button": "@vant/weapp/button/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-field": "@vant/weapp/field/index",
+    "van-picker": "@vant/weapp/picker/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-calendar": "@vant/weapp/calendar/index"
+  }
+}

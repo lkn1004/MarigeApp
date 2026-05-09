@@ -1,0 +1,364 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
+.container {
+  padding: var(--spacing-md);
+  padding-bottom: 200rpx;
+}
+
+.status-card {
+  background: linear-gradient(135deg, var(--warning-color), #FF9800);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  margin-bottom: var(--spacing-md);
+  color: white;
+}
+
+.status-card.completed {
+  background: linear-gradient(135deg, var(--success-color), #4CAF50);
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.status-checkbox {
+  width: 64rpx;
+  height: 64rpx;
+  border: 4rpx solid rgba(255,255,255,0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+}
+
+.status-checkbox.checked {
+  background: white;
+  border-color: white;
+  color: var(--success-color);
+}
+
+.status-info {
+  flex: 1;
+}
+
+.status-text {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.status-date {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+.main-card {
+  margin-bottom: var(--spacing-md);
+}
+
+.todo-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 24rpx;
+  line-height: 1.4;
+}
+
+.meta-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+  flex-wrap: wrap;
+}
+
+.category-tag,
+.priority-tag {
+  padding: 8rpx 20rpx;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+}
+
+.priority-tag.priority-high {
+  background: #FFF1F0;
+  color: var(--error-color);
+}
+
+.priority-tag.priority-medium {
+  background: #FFF7E6;
+  color: var(--warning-color);
+}
+
+.priority-tag.priority-low {
+  background: #E6F7E6;
+  color: var(--success-color);
+}
+
+.info-list {
+  border-top: 2rpx solid var(--bg-secondary);
+  padding-top: 24rpx;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.info-item:not(:last-child) {
+  border-bottom: 2rpx solid var(--bg-secondary);
+}
+
+.info-icon {
+  font-size: 32rpx;
+  margin-right: 16rpx;
+}
+
+.info-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  min-width: 120rpx;
+}
+
+.info-value {
+  flex: 1;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.notes-card,
+.subtasks-card {
+  margin-bottom: var(--spacing-md);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.add-subtask-btn {
+  width: 56rpx;
+  height: 56rpx;
+  background: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-size: 36rpx;
+  font-weight: 300;
+}
+
+.notes-content {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  line-height: 1.6;
+  display: block;
+}
+
+.subtask-list {
+  margin-top: 16rpx;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  margin-bottom: 12rpx;
+}
+
+.subtask-item:last-child {
+  margin-bottom: 0;
+}
+
+.subtask-checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border: 3rpx solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.subtask-checkbox.checked {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+}
+
+.subtask-title {
+  flex: 1;
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+}
+
+.subtask-title.completed {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+}
+
+.subtask-delete {
+  width: 44rpx;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.empty-subtasks {
+  text-align: center;
+  padding: 40rpx;
+  color: var(--text-tertiary);
+  font-size: var(--font-size-sm);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16rpx;
+  margin-top: var(--spacing-lg);
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  padding: 24rpx;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: none;
+}
+
+.action-btn.copy {
+  background: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.action-btn.delete {
+  background: #FFF1F0;
+  color: var(--error-color);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  width: 90%;
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.modal-header {
+  padding: 32rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.modal-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 32rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  box-sizing: border-box;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 16rpx;
+  padding: 24rpx 32rpx;
+  border-top: 2rpx solid var(--border-color);
+}
+
+.modal-btn {
+  flex: 1;
+  height: 80rpx;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-btn.cancel {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.modal-btn.confirm {
+  background: var(--primary-color);
+  color: white;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

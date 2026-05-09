@@ -1,0 +1,235 @@
+<view class="page">
+  <!-- 统计卡片 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <text class="stat-value">{{stats.total}}</text>
+      <text class="stat-label">总人数</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value confirmed">{{stats.confirmed}}</text>
+      <text class="stat-label">已确认</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value pending">{{stats.pending}}</text>
+      <text class="stat-label">待回复</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value declined">{{stats.declined}}</text>
+      <text class="stat-label">已婉拒</text>
+    </view>
+  </view>
+
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索宾客..."
+        value="{{searchKeyword}}"
+        bindinput="onSearch"
+      />
+    </view>
+  </view>
+
+  <!-- 筛选标签 -->
+  <view class="filter-section">
+    <view class="filter-group">
+      <text class="filter-label">分组</text>
+      <scroll-view class="filter-scroll" scroll-x>
+        <view class="filter-tags">
+          <view 
+            class="filter-tag {{selectedGroup === 'all' ? 'active' : ''}}"
+            data-group="all"
+            bindtap="selectGroup"
+          >全部</view>
+          <view 
+            class="filter-tag {{selectedGroup === group.id ? 'active' : ''}}"
+            wx:for="{{groups}}"
+            wx:key="id"
+            data-group="{{group.id}}"
+            bindtap="selectGroup"
+          >{{item.name}}</view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 宾客列表 -->
+  <view class="guest-container">
+    <view class="guest-list" wx:if="{{filteredGuests.length > 0}}">
+      <view 
+        class="guest-card card"
+        wx:for="{{filteredGuests}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+      >
+        <view class="guest-main" bindtap="toggleGuestStatus" data-id="{{item.id}}">
+          <view class="guest-status {{item.status}}">
+            <text wx:if="{{item.status === 'confirmed'}}">✓</text>
+            <text wx:if="{{item.status === 'declined'}}">✗</text>
+            <text wx:if="{{item.status === 'pending' || item.status === 'sent'}}">?</text>
+          </view>
+          <view class="guest-content">
+            <view class="guest-header">
+              <text class="guest-name">{{item.name}}</text>
+              <text class="guest-attendant" wx:if="{{item.isAttendant}}">👰</text>
+            </view>
+            <view class="guest-meta">
+              <text class="meta-item" wx:if="{{item.title}}">{{item.title}}</text>
+              <text class="meta-separator" wx:if="{{item.title && item.phone}}">|</text>
+              <text class="meta-item" wx:if="{{item.phone}}">{{item.phone}}</text>
+            </view>
+            <view class="guest-tags">
+              <text class="guest-tag group-tag">{{item.groupName}}</text>
+              <text class="guest-tag status-tag" style="background: {{item.statusColor}}20; color: {{item.statusColor}}">
+                {{item.statusName}}
+              </text>
+            </view>
+          </view>
+        </view>
+        <view class="guest-actions">
+          <view class="action-btn" bindtap="editGuest" data-id="{{item.id}}">
+            <text>✏️</text>
+          </view>
+          <view class="action-btn delete" bindtap="deleteGuest" data-id="{{item.id}}">
+            <text>🗑️</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{filteredGuests.length === 0 && !loading}}">
+      <text class="empty-icon">👥</text>
+      <text class="empty-text">暂无宾客</text>
+      <text class="empty-hint">点击下方按钮添加宾客</text>
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="fab" bindtap="openAddModal">
+    <text>+</text>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal {{showAddModal ? 'show' : ''}}" wx:if="{{showAddModal}}">
+    <view class="modal-mask" bindtap="closeAddModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{editingGuest ? '编辑宾客' : '添加宾客'}}</text>
+        <view class="modal-close" bindtap="closeAddModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">姓名 *</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入宾客姓名"
+            value="{{newGuest.name}}"
+            bindinput="onNameInput"
+          />
+        </view>
+
+        <view class="form-row">
+          <view class="form-item half">
+            <text class="form-label">称谓</text>
+            <input 
+              class="form-input" 
+              placeholder="如：叔叔"
+              value="{{newGuest.title}}"
+              bindinput="onTitleInput"
+            />
+          </view>
+          <view class="form-item half">
+            <text class="form-label">关系</text>
+            <input 
+              class="form-input" 
+              placeholder="如：同事"
+              value="{{newGuest.relation}}"
+              bindinput="onRelationInput"
+            />
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">电话</text>
+          <input 
+            class="form-input" 
+            type="number"
+            placeholder="请输入联系电话"
+            value="{{newGuest.phone}}"
+            bindinput="onPhoneInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">分组</text>
+          <view class="group-options">
+            <view 
+              class="group-option {{newGuest.group === group.id ? 'selected' : ''}}"
+              wx:for="{{groups}}"
+              wx:key="id"
+              data-group="{{group.id}}"
+              bindtap="selectGroupNew"
+            >{{item.name}}</view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">邀请状态</text>
+          <view class="status-options">
+            <view 
+              class="status-option {{newGuest.status === status.id ? 'selected' : ''}}"
+              wx:for="{{statuses}}"
+              wx:key="id"
+              data-status="{{status.id}}"
+              bindtap="selectStatusNew"
+              style="border-color: {{newGuest.status === status.id ? status.color : ''}}; color: {{newGuest.status === status.id ? status.color : ''}}"
+            >{{status.name}}</view>
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">特殊需求</text>
+          <input 
+            class="form-input" 
+            placeholder="如：素食、清淡"
+            value="{{newGuest.dietary}}"
+            bindinput="onDietaryInput"
+          />
+        </view>
+
+        <view class="form-item attendant-item">
+          <view class="attendant-row">
+            <text class="form-label">伴郎/伴娘</text>
+            <switch 
+              checked="{{newGuest.isAttendant}}" 
+              bindchange="toggleAttendant"
+              color="#E8B4B8"
+            />
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">备注</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="添加备注..."
+            value="{{newGuest.notes}}"
+            bindinput="onNotesInput"
+          ></textarea>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeAddModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveGuest">保存</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,474 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  padding-bottom: 200rpx;
+}
+
+.calendar-header {
+  background: white;
+  padding: 24rpx 32rpx;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.nav-btn {
+  width: 64rpx;
+  height: 64rpx;
+  background: var(--bg-secondary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: var(--text-primary);
+}
+
+.current-month {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.month-text {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.today-btn {
+  padding: 8rpx 20rpx;
+  background: var(--primary-light);
+  color: var(--primary-color);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+}
+
+.week-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+}
+
+.week-day {
+  padding: 16rpx 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.calendar-grid {
+  background: white;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 16rpx;
+  gap: 8rpx;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.calendar-day:active {
+  transform: scale(0.95);
+}
+
+.calendar-day.other-month {
+  opacity: 0.3;
+}
+
+.calendar-day.today {
+  background: var(--primary-light);
+}
+
+.calendar-day.today .day-number {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.calendar-day.selected {
+  background: var(--primary-color);
+}
+
+.calendar-day.selected .day-number {
+  color: white;
+}
+
+.calendar-day.has-high {
+  background: #FFF1F0;
+}
+
+.calendar-day.has-high.selected {
+  background: var(--primary-color);
+}
+
+.day-number {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  margin-bottom: 4rpx;
+}
+
+.day-markers {
+  display: flex;
+  gap: 4rpx;
+}
+
+.marker {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+}
+
+.todo-marker {
+  background: var(--primary-color);
+}
+
+.high-marker {
+  background: var(--error-color);
+}
+
+.completed-marker {
+  background: var(--success-color);
+}
+
+.wedding-badge {
+  position: absolute;
+  top: 4rpx;
+  right: 4rpx;
+  font-size: 16rpx;
+}
+
+.selected-detail {
+  background: white;
+  margin-top: 16rpx;
+  padding: 32rpx;
+  min-height: 300rpx;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.detail-date {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.detail-actions {
+  display: flex;
+  gap: 12rpx;
+}
+
+.action-btn {
+  width: 56rpx;
+  height: 56rpx;
+  background: var(--primary-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color);
+  font-size: 32rpx;
+  font-weight: 300;
+}
+
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16rpx;
+  padding: 20rpx;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.todo-checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border: 3rpx solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 4rpx;
+}
+
+.todo-checkbox.checked {
+  background: var(--success-color);
+  border-color: var(--success-color);
+  color: white;
+}
+
+.todo-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.todo-title {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.todo-title.completed {
+  text-decoration: line-through;
+  color: var(--text-tertiary);
+}
+
+.todo-meta {
+  display: flex;
+  gap: 8rpx;
+  flex-wrap: wrap;
+}
+
+.category-tag,
+.priority-tag {
+  padding: 4rpx 12rpx;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+}
+
+.priority-tag.priority-high {
+  background: #FFF1F0;
+  color: var(--error-color);
+}
+
+.priority-tag.priority-medium {
+  background: #FFF7E6;
+  color: var(--warning-color);
+}
+
+.priority-tag.priority-low {
+  background: #E6F7E6;
+  color: var(--success-color);
+}
+
+.empty-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80rpx 0;
+}
+
+.empty-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin-bottom: 8rpx;
+}
+
+.empty-hint {
+  font-size: var(--font-size-sm);
+  color: var(--text-tertiary);
+}
+
+.wedding-info {
+  margin: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+}
+
+.wedding-header {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.wedding-icon {
+  font-size: 60rpx;
+}
+
+.wedding-content {
+  flex: 1;
+}
+
+.wedding-title {
+  font-size: var(--font-size-sm);
+  opacity: 0.9;
+  display: block;
+  margin-bottom: 4rpx;
+}
+
+.wedding-date {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  width: 100%;
+  background: white;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  animation: slideUp 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx;
+  border-bottom: 2rpx solid var(--border-color);
+}
+
+.modal-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.modal-close {
+  font-size: 48rpx;
+  color: var(--text-tertiary);
+}
+
+.modal-body {
+  padding: 32rpx;
+}
+
+.form-item {
+  margin-bottom: 32rpx;
+}
+
+.form-item:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-bottom: 12rpx;
+}
+
+.form-input {
+  width: 100%;
+  padding: 20rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  box-sizing: border-box;
+}
+
+.type-options {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.type-option {
+  padding: 12rpx 24rpx;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.type-option.selected {
+  color: white;
+}
+
+.date-picker {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  border: 2rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+}
+
+.picker-icon {
+  font-size: 32rpx;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 16rpx;
+  padding: 24rpx 32rpx;
+  border-top: 2rpx solid var(--border-color);
+}
+
+.modal-btn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-btn.cancel {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.modal-btn.confirm {
+  background: var(--primary-color);
+  color: white;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

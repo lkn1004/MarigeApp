@@ -1,0 +1,207 @@
+<view class="page">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索供应商..."
+        value="{{searchKeyword}}"
+        bindinput="onSearch"
+      />
+    </view>
+  </view>
+
+  <!-- 类型筛选 -->
+  <view class="type-filter">
+    <scroll-view class="filter-scroll" scroll-x>
+      <view class="filter-tags">
+        <view 
+          class="filter-tag {{selectedType === 'all' ? 'active' : ''}}"
+          data-type="all"
+          bindtap="selectType"
+        >
+          全部
+        </view>
+        <view 
+          class="filter-tag {{selectedType === type.id ? 'active' : ''}}"
+          wx:for="{{types}}"
+          wx:key="id"
+          data-type="{{type.id}}"
+          bindtap="selectType"
+        >
+          {{type.name}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 供应商列表 -->
+  <view class="supplier-container">
+    <view class="supplier-list" wx:if="{{filteredSuppliers.length > 0}}">
+      <view 
+        class="supplier-card card"
+        wx:for="{{filteredSuppliers}}"
+        wx:key="id"
+        data-id="{{item.id}}"
+        bindtap="goToDetail"
+      >
+        <view class="supplier-header">
+          <view class="supplier-type">{{item.typeName}}</view>
+          <view class="supplier-name">{{item.name}}</view>
+        </view>
+        
+        <view class="supplier-info">
+          <view class="info-item" wx:if="{{item.contact}}">
+            <text class="info-icon">👤</text>
+            <text class="info-text">{{item.contact}}</text>
+          </view>
+          <view class="info-item" wx:if="{{item.phone}}">
+            <text class="info-icon">📞</text>
+            <text class="info-text">{{item.phone}}</text>
+          </view>
+          <view class="info-item" wx:if="{{item.schedule}}">
+            <text class="info-icon">📅</text>
+            <text class="info-text">{{item.schedule}}</text>
+          </view>
+        </view>
+
+        <view class="supplier-footer">
+          <view class="supplier-price">
+            <text class="price-label">报价</text>
+            <text class="price-value">{{formatCurrency(item.price)}}</text>
+          </view>
+          <view class="supplier-actions">
+            <view class="action-btn" catchtap="editSupplier" data-id="{{item.id}}">
+              <text>✏️</text>
+            </view>
+            <view class="action-btn delete" catchtap="deleteSupplier" data-id="{{item.id}}">
+              <text>🗑️</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{filteredSuppliers.length === 0 && !loading}}">
+      <text class="empty-icon">🏪</text>
+      <text class="empty-text">暂无供应商</text>
+      <text class="empty-hint">点击下方按钮添加第一个供应商</text>
+    </view>
+  </view>
+
+  <!-- 添加按钮 -->
+  <view class="fab" bindtap="openAddModal">
+    <text>+</text>
+  </view>
+
+  <!-- 添加/编辑弹窗 -->
+  <view class="modal {{showAddModal ? 'show' : ''}}" wx:if="{{showAddModal}}">
+    <view class="modal-mask" bindtap="closeAddModal"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">{{editingSupplier ? '编辑供应商' : '添加供应商'}}</text>
+        <view class="modal-close" bindtap="closeAddModal">×</view>
+      </view>
+      
+      <view class="modal-body">
+        <view class="form-item">
+          <text class="form-label">名称 *</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入供应商名称"
+            value="{{newSupplier.name}}"
+            bindinput="onNameInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">类型</text>
+          <scroll-view class="type-scroll" scroll-x>
+            <view class="type-options">
+              <view 
+                class="type-option {{newSupplier.type === type.id ? 'selected' : ''}}"
+                wx:for="{{types}}"
+                wx:key="id"
+                data-type="{{type.id}}"
+                bindtap="selectSupplierType"
+              >
+                {{type.name}}
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">联系人</text>
+          <input 
+            class="form-input" 
+            placeholder="请输入联系人"
+            value="{{newSupplier.contact}}"
+            bindinput="onContactInput"
+          />
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">电话</text>
+          <input 
+            class="form-input" 
+            type="number"
+            placeholder="请输入联系电话"
+            value="{{newSupplier.phone}}"
+            bindinput="onPhoneInput"
+          />
+        </view>
+
+        <view class="form-row">
+          <view class="form-item half">
+            <text class="form-label">报价</text>
+            <input 
+              class="form-input" 
+              type="digit"
+              placeholder="0.00"
+              value="{{newSupplier.price}}"
+              bindinput="onPriceInput"
+            />
+          </view>
+          <view class="form-item half">
+            <text class="form-label">定金</text>
+            <input 
+              class="form-input" 
+              type="digit"
+              placeholder="0.00"
+              value="{{newSupplier.deposit}}"
+              bindinput="onDepositInput"
+            />
+          </view>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">档期</text>
+          <picker mode="date" value="{{newSupplier.schedule}}" bindchange="onScheduleChange">
+            <view class="date-picker">
+              <text>{{newSupplier.schedule || '请选择档期'}}</text>
+              <text class="picker-icon">📅</text>
+            </view>
+          </picker>
+        </view>
+
+        <view class="form-item">
+          <text class="form-label">备注</text>
+          <textarea 
+            class="form-textarea" 
+            placeholder="添加备注..."
+            value="{{newSupplier.notes}}"
+            bindinput="onNotesInput"
+          ></textarea>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button class="modal-btn cancel" bindtap="closeAddModal">取消</button>
+        <button class="modal-btn confirm" bindtap="saveSupplier">保存</button>
+      </view>
+    </view>
+  </view>
+</view>
