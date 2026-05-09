@@ -1,4 +1,4 @@
-App<IAppOption>({
+App({
   globalData: {
     userInfo,
     hasUserInfo: false

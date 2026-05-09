@@ -94,7 +94,7 @@ Page({
       }
     } else {
       todoList.push({
-        id: Date.now().toString(),
+        id.now().toString(),
         title: formData.title.trim(),
         category: formData.category,
         priority: formData.priority,

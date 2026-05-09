@@ -7,10 +7,10 @@ Page({
     currentYear: new Date().getFullYear(),
     currentMonth: new Date().getMonth(),
     weekDays: getWeekDays(),
-    monthDays: [],
+    monthDays,
     selectedDate: '',
-    selectedTodos: [],
-    selectedEvents: [],
+    selectedTodos,
+    selectedEvents,
     viewMode: 'month',
     showEventModal: false,
     newEvent: {
@@ -24,7 +24,7 @@ Page({
       { id: 'meeting', name: '沟通会议', color: '#1890FF' },
       { id: 'payment', name: '付款日期', color: '#D4AF37' }
     ],
-    weddingSettings: null,
+    weddingSettings,
     loading: true
   },
 

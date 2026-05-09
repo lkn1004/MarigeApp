@@ -100,7 +100,7 @@ Page({
       }
     } else {
       supplierList.push({
-        id: Date.now().toString(),
+        id.now().toString(),
         ...formData,
         price: formData.price ? parseFloat(formData.price) : 0,
         deposit: formData.deposit ? parseFloat(formData.deposit) : 0,
