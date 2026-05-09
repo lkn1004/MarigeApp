@@ -1,6 +1,6 @@
 App({
   globalData: {
-    userInfo,
+    userInfo: null,
     hasUserInfo: false
   },
   
@@ -25,7 +25,7 @@ App({
         groomName: '',
         brideName: '',
         coverImage: '',
-        countdownEvents,
+        countdownEvents: [],
         enableReminder: true,
         reminderDays: [7, 30]
       });
@@ -47,7 +47,7 @@ App({
         totalBudget: 0,
         totalSpent: 0,
         warningThreshold: 80,
-        records
+        records: []
       });
     }
     

@@ -5,9 +5,9 @@ const { generateId } = require('../../utils/id');
 Page({
   data: {
     timelines: TIMELINE_INFO,
-    selectedTimeline,
-    checklistItems,
-    expandedTimelines,
+    selectedTimeline: null,
+    checklistItems: [],
+    expandedTimelines: [],
     applying: false,
     loading: true
   },
@@ -72,7 +72,7 @@ Page({
     return timeline ? timeline.name : '';
   },
 
-  doApplyTimeline(timelineId, items[]) {
+  doApplyTimeline(timelineId, items) {
     this.setData({ applying: true });
     
     const todoList = wx.getStorageSync('todo_list') || [];
@@ -82,7 +82,7 @@ Page({
     let weddingDate = '';
     if (settings.weddingDate) {
       const date = new Date(settings.weddingDate);
-      date.setDate(date.getDate() - TIMELINE_INFO.find(t => t.id === timelineId)?.days || 0);
+      date.setDate(date.getDate() - (TIMELINE_INFO.find(t => t.id === timelineId)?.days || 0));
       weddingDate = this.formatDate(date);
     }
     
@@ -93,11 +93,11 @@ Page({
       priority: item.priority,
       dueDate: weddingDate,
       completed: false,
-      completedAt,
-      supplierId,
-      budget,
+      completedAt: null,
+      supplierId: item.supplierId || null,
+      budget: item.budget || 0,
       notes: '',
-      subtasks,
+      subtasks: [],
       createdAt: now,
       updatedAt: now
     }));
@@ -152,11 +152,11 @@ Page({
         priority: item.priority,
         dueDate: weddingDate,
         completed: false,
-        completedAt,
-        supplierId,
-        budget,
+        completedAt: null,
+        supplierId: item.supplierId || null,
+        budget: item.budget || 0,
         notes: '',
-        subtasks,
+        subtasks: [],
         createdAt: now,
         updatedAt: now
       }));

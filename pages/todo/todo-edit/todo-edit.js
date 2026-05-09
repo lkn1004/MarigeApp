@@ -1,10 +1,11 @@
 const app = getApp();
 const { TODO_CATEGORIES, PRIORITIES } = require('../../../data/categories');
+const { generateId } = require('../../../utils/id');
 
 Page({
   data: {
     todoId: '',
-    todo,
+    todo: null,
     categories: TODO_CATEGORIES,
     priorities: PRIORITIES,
     formData: {
@@ -88,22 +89,22 @@ Page({
           priority: formData.priority,
           dueDate: formData.dueDate,
           notes: formData.notes,
-          budget: formData.budget ? parseFloat(formData.budget) ,
+          budget: formData.budget ? parseFloat(formData.budget) : 0,
           updatedAt: now
         };
       }
     } else {
       todoList.push({
-        id.now().toString(),
+        id: Date.now().toString(),
         title: formData.title.trim(),
         category: formData.category,
         priority: formData.priority,
         dueDate: formData.dueDate,
         completed: false,
-        completedAt,
+        completedAt: null,
         notes: formData.notes,
-        budget: formData.budget ? parseFloat(formData.budget) ,
-        subtasks,
+        budget: formData.budget ? parseFloat(formData.budget) : 0,
+        subtasks: [],
         createdAt: now,
         updatedAt: now
       });

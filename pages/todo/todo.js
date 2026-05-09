@@ -4,8 +4,8 @@ const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    todos,
-    filteredTodos,
+    todos: [],
+    filteredTodos: [],
     categories: TODO_CATEGORIES,
     selectedCategory: 'all',
     selectedPriority: 'all',
@@ -13,7 +13,7 @@ Page({
     searchKeyword: '',
     showFilter: false,
     showAddModal: false,
-    editingTodo,
+    editingTodo: null,
     newTodo: {
       title: '',
       category: 'other',
@@ -29,7 +29,7 @@ Page({
     sortOrder: 'asc',
     viewMode: 'list',
     showBatchActions: false,
-    selectedTodos,
+    selectedTodos: [],
     loading: true
   },
 
@@ -177,7 +177,7 @@ Page({
   openAddModal() {
     this.setData({
       showAddModal: true,
-      editingTodo,
+      editingTodo: null,
       newTodo: {
         title: '',
         category: 'other',
@@ -253,7 +253,7 @@ Page({
           priority: newTodo.priority,
           dueDate: newTodo.dueDate,
           notes: newTodo.notes,
-          budget: newTodo.budget ? parseFloat(newTodo.budget) ,
+          budget: newTodo.budget ? parseFloat(newTodo.budget) : 0,
           updatedAt: now
         };
       }
@@ -265,10 +265,10 @@ Page({
         priority: newTodo.priority,
         dueDate: newTodo.dueDate,
         completed: false,
-        completedAt,
+        completedAt: null,
         notes: newTodo.notes,
-        budget: newTodo.budget ? parseFloat(newTodo.budget) ,
-        subtasks,
+        budget: newTodo.budget ? parseFloat(newTodo.budget) : 0,
+        subtasks: [],
         createdAt: now,
         updatedAt: now
       };
@@ -288,13 +288,14 @@ Page({
   toggleTodoComplete(e) {
     const todoId = e.currentTarget.dataset.id;
     const todoList = wx.getStorageSync('todo_list') || [];
+    const now = this.formatDate(new Date());
     
     const updatedList = todoList.map((todo) => {
       if (todo.id === todoId) {
         return {
           ...todo,
           completed: !todo.completed,
-          completedAt: !todo.completed ? this.formatDate(new Date()) 
+          completedAt: !todo.completed ? now : null
         };
       }
       return todo;
@@ -356,7 +357,7 @@ Page({
   toggleBatchSelect() {
     this.setData({
       showBatchActions: !this.data.showBatchActions,
-      selectedTodos
+      selectedTodos: []
     });
   },
 

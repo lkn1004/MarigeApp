@@ -5,12 +5,12 @@ const { generateId } = require('../../utils/id');
 Page({
   data: {
     todoId: '',
-    todo,
-    categoryInfo,
-    priorityInfo,
-    supplier,
+    todo: null,
+    categoryInfo: null,
+    priorityInfo: null,
+    supplier: null,
     editing: false,
-    editingSubtask,
+    editingSubtask: null,
     newSubtaskTitle: '',
     showAddSubtask: false,
     currentDate: ''
@@ -73,7 +73,7 @@ Page({
         return {
           ...t,
           completed: !t.completed,
-          completedAt: !t.completed ? now 
+          completedAt: !t.completed ? now : null
         };
       }
       return t;
@@ -235,7 +235,7 @@ Page({
       id: generateId(),
       title: `${this.data.todo.title} (副本)`,
       completed: false,
-      completedAt,
+      completedAt: null,
       dueDate: '',
       createdAt: now,
       updatedAt: now

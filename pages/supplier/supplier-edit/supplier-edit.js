@@ -4,7 +4,7 @@ const { SUPPLIER_TYPES } = require('../../../data/categories');
 Page({
   data: {
     supplierId: '',
-    supplier,
+    supplier: null,
     types: SUPPLIER_TYPES,
     formData: {
       name: '',
@@ -100,7 +100,7 @@ Page({
       }
     } else {
       supplierList.push({
-        id.now().toString(),
+        id: Date.now().toString(),
         ...formData,
         price: formData.price ? parseFloat(formData.price) : 0,
         deposit: formData.deposit ? parseFloat(formData.deposit) : 0,
