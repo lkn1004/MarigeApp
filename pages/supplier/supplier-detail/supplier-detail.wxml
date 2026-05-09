@@ -1,0 +1,34 @@
+<view class="page" wx:if="{{supplier}}">
+  <view class="container">
+    <view class="detail-card">
+      <view class="supplier-name">{{supplier.name}}</view>
+      <view class="supplier-type">{{supplier.typeName}}</view>
+    </view>
+    <view class="info-card">
+      <view class="info-item" wx:if="{{supplier.contact}}">
+        <text class="info-label">联系人</text>
+        <text class="info-value">{{supplier.contact}}</text>
+      </view>
+      <view class="info-item" wx:if="{{supplier.phone}}">
+        <text class="info-label">电话</text>
+        <text class="info-value">{{supplier.phone}}</text>
+      </view>
+      <view class="info-item" wx:if="{{supplier.price}}">
+        <text class="info-label">报价</text>
+        <text class="info-value price">¥{{supplier.price}}</text>
+      </view>
+      <view class="info-item" wx:if="{{supplier.deposit}}">
+        <text class="info-label">定金</text>
+        <text class="info-value">¥{{supplier.deposit}}</text>
+      </view>
+      <view class="info-item" wx:if="{{supplier.schedule}}">
+        <text class="info-label">档期</text>
+        <text class="info-value">{{supplier.schedule}}</text>
+      </view>
+    </view>
+    <view class="notes-card" wx:if="{{supplier.notes}}">
+      <text class="notes-title">备注</text>
+      <text class="notes-content">{{supplier.notes}}</text>
+    </view>
+  </view>
+</view>

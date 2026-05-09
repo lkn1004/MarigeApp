@@ -1,0 +1,22 @@
+<view class="page">
+  <view class="container">
+    <view class="form-section">
+      <text class="section-title">描述</text>
+      <input class="form-input" placeholder="请输入描述" value="{{formData.description}}" bindinput="onDescriptionInput" />
+    </view>
+    <view class="form-section">
+      <text class="section-title">金额</text>
+      <input class="form-input" type="digit" placeholder="0.00" value="{{formData.amount}}" bindinput="onAmountInput" />
+    </view>
+    <view class="form-section">
+      <text class="section-title">日期</text>
+      <picker mode="date" value="{{formData.date}}" bindchange="onDateChange">
+        <view class="date-picker">
+          <text>{{formData.date || '请选择日期'}}</text>
+          <text>📅</text>
+        </view>
+      </picker>
+    </view>
+    <button class="save-btn" bindtap="saveRecord">保存</button>
+  </view>
+</view>

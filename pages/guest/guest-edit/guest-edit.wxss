@@ -1,0 +1,14 @@
+.page { min-height: 100vh; background: var(--bg-secondary); }
+.container { padding: var(--spacing-md); }
+.detail-card { background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); border-radius: var(--radius-lg); padding: 40rpx; color: white; margin-bottom: var(--spacing-md); }
+.guest-name { font-size: 40rpx; font-weight: 600; margin-bottom: 8rpx; }
+.guest-info { display: flex; gap: 12rpx; }
+.info-tag { padding: 4rpx 12rpx; background: rgba(255,255,255,0.2); border-radius: var(--radius-full); font-size: var(--font-size-xs); }
+.info-card { background: white; border-radius: var(--radius-md); padding: var(--spacing-md); margin-bottom: var(--spacing-md); }
+.info-item { display: flex; justify-content: space-between; padding: 20rpx 0; border-bottom: 2rpx solid var(--bg-secondary); }
+.info-item:last-child { border-bottom: none; }
+.info-label { font-size: var(--font-size-sm); color: var(--text-secondary); }
+.info-value { font-size: var(--font-size-md); color: var(--text-primary); }
+.notes-card { background: white; border-radius: var(--radius-md); padding: var(--spacing-md); }
+.notes-title { font-size: var(--font-size-sm); color: var(--text-secondary); display: block; margin-bottom: 12rpx; }
+.notes-content { font-size: var(--font-size-md); color: var(--text-primary); line-height: 1.6; }

@@ -1,0 +1,33 @@
+<view class="page" wx:if="{{guest}}">
+  <view class="container">
+    <view class="detail-card">
+      <view class="guest-name">{{guest.name}}</view>
+      <view class="guest-info">
+        <text class="info-tag">{{guest.groupName}}</text>
+        <text class="info-tag status-{{guest.status}}">{{guest.statusName}}</text>
+      </view>
+    </view>
+    <view class="info-card">
+      <view class="info-item" wx:if="{{guest.title}}">
+        <text class="info-label">称谓</text>
+        <text class="info-value">{{guest.title}}</text>
+      </view>
+      <view class="info-item" wx:if="{{guest.relation}}">
+        <text class="info-label">关系</text>
+        <text class="info-value">{{guest.relation}}</text>
+      </view>
+      <view class="info-item" wx:if="{{guest.phone}}">
+        <text class="info-label">电话</text>
+        <text class="info-value">{{guest.phone}}</text>
+      </view>
+      <view class="info-item" wx:if="{{guest.dietary}}">
+        <text class="info-label">特殊需求</text>
+        <text class="info-value">{{guest.dietary}}</text>
+      </view>
+    </view>
+    <view class="notes-card" wx:if="{{guest.notes}}">
+      <text class="notes-title">备注</text>
+      <text class="notes-content">{{guest.notes}}</text>
+    </view>
+  </view>
+</view>

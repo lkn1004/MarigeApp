@@ -1,0 +1,102 @@
+<view class="page">
+  <view class="container">
+    <!-- 标题 -->
+    <view class="form-section">
+      <text class="section-title">待办标题 *</text>
+      <input 
+        class="form-input"
+        placeholder="请输入待办事项"
+        value="{{formData.title}}"
+        bindinput="onTitleInput"
+      />
+    </view>
+
+    <!-- 分类 -->
+    <view class="form-section">
+      <text class="section-title">分类</text>
+      <scroll-view class="category-scroll" scroll-x>
+        <view class="category-tags">
+          <view 
+            class="category-tag {{formData.category === category.id ? 'selected' : ''}}"
+            wx:for="{{categories}}"
+            wx:key="id"
+            data-category="{{category.id}}"
+            bindtap="selectCategory"
+            style="background: {{formData.category === category.id ? category.color : ''}}"
+          >
+            {{category.name}}
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 优先级 -->
+    <view class="form-section">
+      <text class="section-title">优先级</text>
+      <view class="priority-tags">
+        <view 
+          class="priority-tag priority-high {{formData.priority === 'high' ? 'selected' : ''}}"
+          data-priority="high"
+          bindtap="selectPriority"
+        >
+          高
+        </view>
+        <view 
+          class="priority-tag priority-medium {{formData.priority === 'medium' ? 'selected' : ''}}"
+          data-priority="medium"
+          bindtap="selectPriority"
+        >
+          中
+        </view>
+        <view 
+          class="priority-tag priority-low {{formData.priority === 'low' ? 'selected' : ''}}"
+          data-priority="low"
+          bindtap="selectPriority"
+        >
+          低
+        </view>
+      </view>
+    </view>
+
+    <!-- 截止日期 -->
+    <view class="form-section">
+      <text class="section-title">截止日期</text>
+      <picker mode="date" value="{{formData.dueDate}}" bindchange="onDateChange">
+        <view class="date-picker">
+          <text>{{formData.dueDate || '请选择日期'}}</text>
+          <text class="picker-icon">📅</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 预算 -->
+    <view class="form-section">
+      <text class="section-title">预算金额</text>
+      <input 
+        class="form-input"
+        type="digit"
+        placeholder="请输入预算金额"
+        value="{{formData.budget}}"
+        bindinput="onBudgetInput"
+      />
+    </view>
+
+    <!-- 备注 -->
+    <view class="form-section">
+      <text class="section-title">备注</text>
+      <textarea 
+        class="form-textarea"
+        placeholder="添加备注信息..."
+        value="{{formData.notes}}"
+        bindinput="onNotesInput"
+      />
+    </view>
+
+    <!-- 保存按钮 -->
+    <view class="form-actions">
+      <button class="save-btn" bindtap="saveTodo">
+        保存
+      </button>
+    </view>
+  </view>
+</view>
