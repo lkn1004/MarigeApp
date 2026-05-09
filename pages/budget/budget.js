@@ -55,6 +55,7 @@ Page({
     
     const categoryStats = this.calculateCategoryStats(budget.records || [], todoList);
     const recentRecords = (budget.records || []).slice(-10).reverse();
+    const showEmptyCategory = categoryStats.every(item => item.spent === 0 && item.planned === 0);
     
     this.setData({
       budget,
@@ -64,6 +65,7 @@ Page({
       percentage,
       categoryStats,
       recentRecords,
+      showEmptyCategory,
       loading: false
     });
   },

@@ -69,7 +69,7 @@
         </view>
       </view>
 
-      <view class="empty-category" wx:if="{{categoryStats.every(item => item.spent === 0 && item.planned === 0)}}">
+      <view class="empty-category" wx:if="{{showEmptyCategory}}">
         <text>暂无支出记录</text>
       </view>
     </view>
