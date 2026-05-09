@@ -4,8 +4,8 @@ const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    todos as any[],
-    filteredTodos as any[],
+    todos,
+    filteredTodos,
     categories: TODO_CATEGORIES,
     selectedCategory: 'all',
     selectedPriority: 'all',
@@ -13,7 +13,7 @@ Page({
     searchKeyword: '',
     showFilter: false,
     showAddModal: false,
-    editingTodo as any,
+    editingTodo,
     newTodo: {
       title: '',
       category: 'other',

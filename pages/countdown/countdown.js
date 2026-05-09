@@ -5,12 +5,12 @@ Page({
   data: {
     weddingDate: '',
     daysUntil: 0,
-    timeUntil as any,
-    settings as any,
-    countdownEvents as any[],
-    milestones as any[],
+    timeUntil,
+    settings,
+    countdownEvents,
+    milestones,
     timer as null,
-    currentTime as any,
+    currentTime,
     loading: true
   },
 

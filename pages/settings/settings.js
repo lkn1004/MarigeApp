@@ -2,7 +2,7 @@ const app = getApp();
 
 Page({
   data: {
-    settings as any,
+    settings,
     weddingDate: '',
     groomName: '',
     brideName: '',

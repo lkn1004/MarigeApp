@@ -5,8 +5,8 @@ const { generateId } = require('../../utils/id');
 Page({
   data: {
     timelines: TIMELINE_INFO,
-    selectedTimeline as any,
-    checklistItems as any[],
+    selectedTimeline,
+    checklistItems,
     expandedTimelines as string[],
     applying: false,
     loading: true

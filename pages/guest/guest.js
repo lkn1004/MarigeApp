@@ -4,15 +4,15 @@ const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    guests as any[],
-    filteredGuests as any[],
+    guests,
+    filteredGuests,
     groups: GUEST_GROUPS,
     statuses: INVITE_STATUS,
     selectedGroup: 'all',
     selectedStatus: 'all',
     searchKeyword: '',
     showAddModal: false,
-    editingGuest as any,
+    editingGuest,
     newGuest: {
       name: '',
       title: '',

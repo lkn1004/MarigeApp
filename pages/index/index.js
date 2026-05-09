@@ -7,9 +7,9 @@ Page({
     groomName: '',
     brideName: '',
     progress: 0,
-    todayTodos as any[],
-    recentTodos as any[],
-    upcomingEvents as any[],
+    todayTodos,
+    recentTodos,
+    upcomingEvents,
     quickStats: {
       totalTodos: 0,
       completedTodos: 0,

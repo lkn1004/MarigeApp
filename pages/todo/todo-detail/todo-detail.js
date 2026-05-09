@@ -5,10 +5,10 @@ const { generateId } = require('../../utils/id');
 Page({
   data: {
     todoId: '',
-    todo as any,
+    todo,
     categoryInfo,
     priorityInfo,
-    supplier as any,
+    supplier,
     editing: false,
     editingSubtask as string | null,
     newSubtaskTitle: '',
