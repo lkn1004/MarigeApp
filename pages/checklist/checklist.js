@@ -42,7 +42,7 @@ Page({
   },
 
   getTimelineItems(timelineId) {
-    const checklist = WEDDING_CHECKLISTS[timelineId 'general'];
+    const checklist = WEDDING_CHECKLISTS[timelineId];
     if (!checklist) return [];
     
     return checklist.map(item => ({
