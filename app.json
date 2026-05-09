@@ -61,13 +61,5 @@
         "selectedIconPath": "assets/icons/settings-active.png"
       }
     ]
-  },
-  "usingComponents": {
-    "van-button": "@vant/weapp/button/index",
-    "van-dialog": "@vant/weapp/dialog/index",
-    "van-field": "@vant/weapp/field/index",
-    "van-picker": "@vant/weapp/picker/index",
-    "van-popup": "@vant/weapp/popup/index",
-    "van-calendar": "@vant/weapp/calendar/index"
   }
 }
