@@ -1,0 +1,57 @@
+<view class="page">
+  <view class="container">
+    <view class="form-section">
+      <text class="section-title">供应商名称 *</text>
+      <input class="form-input" placeholder="请输入供应商名称" value="{{formData.name}}" bindinput="onNameInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-title">类型</text>
+      <scroll-view class="type-scroll" scroll-x>
+        <view class="type-tags">
+          <view class="type-tag {{formData.type === type.id ? 'selected' : ''}}" wx:for="{{types}}" wx:key="id" data-type="{{type.id}}" bindtap="selectType">
+            {{type.name}}
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="form-section">
+      <text class="section-title">联系人</text>
+      <input class="form-input" placeholder="请输入联系人" value="{{formData.contact}}" bindinput="onContactInput" />
+    </view>
+
+    <view class="form-section">
+      <text class="section-title">电话</text>
+      <input class="form-input" type="number" placeholder="请输入联系电话" value="{{formData.phone}}" bindinput="onPhoneInput" />
+    </view>
+
+    <view class="form-row">
+      <view class="form-section half">
+        <text class="section-title">报价</text>
+        <input class="form-input" type="digit" placeholder="0.00" value="{{formData.price}}" bindinput="onPriceInput" />
+      </view>
+      <view class="form-section half">
+        <text class="section-title">定金</text>
+        <input class="form-input" type="digit" placeholder="0.00" value="{{formData.deposit}}" bindinput="onDepositInput" />
+      </view>
+    </view>
+
+    <view class="form-section">
+      <text class="section-title">档期</text>
+      <picker mode="date" value="{{formData.schedule}}" bindchange="onScheduleChange">
+        <view class="date-picker">
+          <text>{{formData.schedule || '请选择档期'}}</text>
+          <text>📅</text>
+        </view>
+      </picker>
+    </view>
+
+    <view class="form-section">
+      <text class="section-title">备注</text>
+      <textarea class="form-textarea" placeholder="添加备注..." value="{{formData.notes}}" bindinput="onNotesInput" />
+    </view>
+
+    <button class="save-btn" bindtap="saveSupplier">保存</button>
+  </view>
+</view>
