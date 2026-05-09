@@ -4,15 +4,15 @@ const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    guests,
-    filteredGuests,
+    guests: [],
+    filteredGuests: [],
     groups: GUEST_GROUPS,
     statuses: INVITE_STATUS,
     selectedGroup: 'all',
     selectedStatus: 'all',
     searchKeyword: '',
     showAddModal: false,
-    editingGuest,
+    editingGuest: null,
     newGuest: {
       name: '',
       title: '',
@@ -123,7 +123,7 @@ Page({
   openAddModal() {
     this.setData({
       showAddModal: true,
-      editingGuest,
+      editingGuest: null,
       newGuest: {
         name: '',
         title: '',
@@ -218,7 +218,6 @@ Page({
         group: newGuest.group,
         status: newGuest.status,
         table: newGuest.table || '',
-        seatNumber,
         dietary: newGuest.dietary,
         isAttendant: newGuest.isAttendant,
         notes: newGuest.notes,

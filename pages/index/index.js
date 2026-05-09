@@ -7,9 +7,9 @@ Page({
     groomName: '',
     brideName: '',
     progress: 0,
-    todayTodos,
-    recentTodos,
-    upcomingEvents,
+    pendingTodos: 0,
+    todayTodos: [],
+    recentTodos: [],
     quickStats: {
       totalTodos: 0,
       completedTodos: 0,
@@ -18,6 +18,7 @@ Page({
       guestCount: 0,
       confirmedGuests: 0
     },
+    budgetPercentage: 0,
     showOnboarding: false,
     loading: true
   },
@@ -61,13 +62,16 @@ Page({
     
     const recentTodos = todoList
       .filter((todo) => todo.completed)
-      .sort((a, b) => 
-        new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
-      )
+      .sort((a, b) => {
+        if (!a.completedAt) return 1;
+        if (!b.completedAt) return -1;
+        return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime();
+      })
       .slice(0, 5);
     
     const completedTodos = todoList.filter((todo) => todo.completed).length;
     const totalTodos = todoList.length;
+    const pendingTodos = totalTodos - completedTodos;
     const progress = totalTodos > 0 ? Math.round((completedTodos / totalTodos) * 100) : 0;
     
     const confirmedGuests = guestList.filter((guest) => 
@@ -81,6 +85,10 @@ Page({
       daysUntilWedding = this.getDaysUntil(weddingDate);
     }
     
+    const totalBudget = budget.totalBudget || 0;
+    const spentBudget = budget.totalSpent || 0;
+    const budgetPercentage = totalBudget > 0 ? Math.round((spentBudget / totalBudget) * 100) : 0;
+    
     this.setData({
       weddingDate,
       daysUntilWedding,
@@ -89,11 +97,13 @@ Page({
       todayTodos,
       recentTodos,
       progress,
+      pendingTodos,
+      budgetPercentage,
       quickStats: {
         totalTodos,
         completedTodos,
-        totalBudget: budget.totalBudget || 0,
-        spentBudget: budget.totalSpent || 0,
+        totalBudget,
+        spentBudget,
         guestCount: guestList.length,
         confirmedGuests
       },

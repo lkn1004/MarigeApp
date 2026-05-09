@@ -2,7 +2,7 @@ const app = getApp();
 
 Page({
   data: {
-    settings,
+    settings: {},
     weddingDate: '',
     groomName: '',
     brideName: '',
@@ -105,6 +105,21 @@ Page({
     this.saveSettings();
   },
 
+  onVenueBlur(e) {
+    this.setData({ weddingVenue: e.detail.value });
+    this.saveSettings();
+  },
+
+  onGroomBlur(e) {
+    this.setData({ groomName: e.detail.value });
+    this.saveSettings();
+  },
+
+  onBrideBlur(e) {
+    this.setData({ brideName: e.detail.value });
+    this.saveSettings();
+  },
+
   saveField(field) {
     this.setData({ [field]: this.data.tempValue });
     this.saveSettings();
@@ -160,10 +175,21 @@ Page({
     });
   },
 
-  formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  goToSupplier() {
+    wx.navigateTo({
+      url: '/pages/supplier/supplier/supplier'
+    });
+  },
+
+  goToGuest() {
+    wx.navigateTo({
+      url: '/pages/guest/guest/guest'
+    });
+  },
+
+  goToChecklist() {
+    wx.navigateTo({
+      url: '/pages/checklist/checklist'
+    });
   }
 });

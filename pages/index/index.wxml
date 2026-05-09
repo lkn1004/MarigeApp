@@ -1,5 +1,4 @@
 <view class="page">
-  <!-- 引导页 -->
   <view class="onboarding-modal" wx:if="{{showOnboarding}}">
     <view class="onboarding-content">
       <view class="onboarding-header">
@@ -31,9 +30,7 @@
     </view>
   </view>
 
-  <!-- 主内容区 -->
   <view class="container" wx:if="{{!showOnboarding}}">
-    <!-- 婚礼倒计时卡片 -->
     <view class="countdown-card">
       <view class="countdown-header">
         <text class="countdown-label">距离婚礼还有</text>
@@ -52,7 +49,6 @@
       </view>
     </view>
 
-    <!-- 进度概览 -->
     <view class="progress-section card">
       <view class="section-header">
         <text class="section-title">筹备进度</text>
@@ -75,13 +71,12 @@
         </view>
         <view class="stat-divider"></view>
         <view class="stat-item">
-          <text class="stat-value">{{quickStats.totalTodos - quickStats.completedTodos}}</text>
+          <text class="stat-value">{{pendingTodos}}</text>
           <text class="stat-label">待完成</text>
         </view>
       </view>
     </view>
 
-    <!-- 今日待办 -->
     <view class="today-section card" wx:if="{{todayTodos.length > 0}}">
       <view class="section-header flex-between">
         <text class="section-title">今日待办</text>
@@ -111,7 +106,6 @@
       </view>
     </view>
 
-    <!-- 快捷操作 -->
     <view class="quick-actions card">
       <view class="action-item" bindtap="goToTodo">
         <view class="action-icon" style="background: #F5E6E8;">
@@ -142,7 +136,6 @@
       </view>
     </view>
 
-    <!-- 预算概览 -->
     <view class="budget-section card" wx:if="{{quickStats.totalBudget > 0}}">
       <view class="section-header">
         <text class="section-title">预算概览</text>
@@ -164,17 +157,14 @@
       <view class="budget-progress">
         <view class="progress-bar">
           <view 
-            class="progress-fill {{quickStats.spentBudget > quickStats.totalBudget * 0.9 ? 'warning' : ''}}" 
-            style="width: {{quickStats.totalBudget > 0 ? Math.min((quickStats.spentBudget / quickStats.totalBudget) * 100, 100) : 0}}%"
+            class="progress-fill {{budgetPercentage > 90 ? 'warning' : ''}}" 
+            style="width: {{budgetPercentage}}%"
           ></view>
         </view>
-        <text class="budget-percentage">
-          {{quickStats.totalBudget > 0 ? Math.round((quickStats.spentBudget / quickStats.totalBudget) * 100) : 0}}%
-        </text>
+        <text class="budget-percentage">{{budgetPercentage}}%</text>
       </view>
     </view>
 
-    <!-- 宾客统计 -->
     <view class="guest-section card" wx:if="{{quickStats.guestCount > 0}}">
       <view class="section-header">
         <text class="section-title">宾客统计</text>
@@ -193,7 +183,6 @@
       </view>
     </view>
 
-    <!-- 最近动态 -->
     <view class="recent-section card" wx:if="{{recentTodos.length > 0}}">
       <view class="section-header">
         <text class="section-title">最近完成</text>

@@ -4,13 +4,13 @@ const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    suppliers,
-    filteredSuppliers,
+    suppliers: [],
+    filteredSuppliers: [],
     types: SUPPLIER_TYPES,
     selectedType: 'all',
     searchKeyword: '',
     showAddModal: false,
-    editingSupplier,
+    editingSupplier: null,
     newSupplier: {
       name: '',
       type: 'hotel',
@@ -92,7 +92,7 @@ Page({
   openAddModal() {
     this.setData({
       showAddModal: true,
-      editingSupplier,
+      editingSupplier: null,
       newSupplier: {
         name: '',
         type: 'hotel',

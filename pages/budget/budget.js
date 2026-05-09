@@ -5,16 +5,17 @@ const { generateId } = require('../../utils/id');
 
 Page({
   data: {
-    budget,
+    budget: null,
     totalBudget: 0,
     totalSpent: 0,
     remaining: 0,
     percentage: 0,
-    categoryStats,
-    recentRecords,
+    categoryStats: [],
+    recentRecords: [],
     showAddModal: false,
     showTemplateModal: false,
-    selectedTemplate,
+    selectedTemplate: null,
+    showEmptyCategory: false,
     newRecord: {
       description: '',
       amount: '',

@@ -305,6 +305,13 @@ Page({
     this.loadTodos();
   },
 
+  goToDetail(e) {
+    const todoId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/todo/todo-detail/todo-detail?id=${todoId}`
+    });
+  },
+
   editTodo(e) {
     const todoId = e.currentTarget.dataset.id;
     const todo = this.data.todos.find((t) => t.id === todoId);
@@ -344,13 +351,6 @@ Page({
           });
         }
       }
-    });
-  },
-
-  goToDetail(e) {
-    const todoId = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: `/pages/todo/todo-detail/todo-detail?id=${todoId}`
     });
   },
 

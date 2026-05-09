@@ -1,5 +1,5 @@
 const app = getApp();
-const { getWeekDays, getMonthDays, getMonthName, formatDate } = require('../../utils/date');
+const { getWeekDays, getMonthDays, formatDate } = require('../../utils/date');
 const { TODO_CATEGORIES } = require('../../data/categories');
 
 Page({
@@ -7,10 +7,10 @@ Page({
     currentYear: new Date().getFullYear(),
     currentMonth: new Date().getMonth(),
     weekDays: getWeekDays(),
-    monthDays,
+    monthDays: [],
     selectedDate: '',
-    selectedTodos,
-    selectedEvents,
+    selectedTodos: [],
+    selectedEvents: [],
     viewMode: 'month',
     showEventModal: false,
     newEvent: {
@@ -24,7 +24,7 @@ Page({
       { id: 'meeting', name: '沟通会议', color: '#1890FF' },
       { id: 'payment', name: '付款日期', color: '#D4AF37' }
     ],
-    weddingSettings,
+    weddingSettings: null,
     loading: true
   },
 
@@ -207,5 +207,10 @@ Page({
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     })}`;
+  },
+
+  getMonthName(month) {
+    const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+    return months[month] || '';
   }
 });
